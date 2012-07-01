@@ -1,0 +1,25 @@
+./example.cpp:
+  - log: parsing replacement list: '0' of macro: depth0
+  - log: parsing replacement list: '100' of macro: a
+  - log: parsing replacement list: '200' of macro: b
+  - log: parsing replacement list: 'i' of macro: _c
+  - log: parsing replacement list: 'i*i' of macro: _a
+  - log: parsing replacement list: '' of macro: CRYPTOPP_X86_ASM_AVAILABLE
+  - log: parsing replacement list: '((X) + (Y))' of macro: FXY
+  - log: parsing replacement list: 'FXY(1,200,3)' of macro: fun
+  - log: parsing replacement list: 'X+100 + j' of macro: INSIDE_FUN_SUPER
+  - log: parsing replacement list: '{  FXY(X,Y,0);  }' of macro: proc
+  - log: parsing replacement list: '(((x) >> 24) & 0xffU)  /* most  significant byte */' of macro: MSB
+  - log: parsing replacement list: '(((x) >> 16) & 0xffU)  /* second in significance */' of macro: SSB
+  - log: parsing replacement list: '(((x) >>  8) & 0xffU)  /* third  in significance */' of macro: TSB
+  - log: parsing replacement list: '(((x)      ) & 0xffU)  /* least significant byte */' of macro: LSB
+  - log: parsing replacement list: 'X+100' of macro: INSIDE_FUN
+  - log: checking the dependency order of macro depth0
+./header1.h:
+  - log: parsing replacement list: '1' of macro: header11_macro
+  - log: parsing replacement list: '2' of macro: header12_macro
+  - log: checking the dependency order of macro header11_macro
+./header2.h:
+  - log: parsing replacement list: 'x+y;' of macro: header1_macro
+  - log: parsing replacement list: 'x[y]' of macro: header3_macro
+  - log: checking the dependency order of macro header1_macro(x,y)

@@ -1,0 +1,19 @@
+./example.cpp:
+  - log: parsing replacement list: '100' of macro: A
+  - log: parsing replacement list: 'i' of macro: _c
+  - log: parsing replacement list: 'i*i' of macro: _a
+  - log: parsing replacement list: '' of macro: CRYPTOPP_X86_ASM_AVAILABLE
+  - log: parsing replacement list: '((X) + (Y))' of macro: FXY
+  - log: parsing replacement list: 'FXY(1,200,3)' of macro: fun
+  - log: parsing replacement list: 'X+100 + j' of macro: INSIDE_FUN_SUPER
+  - log: parsing replacement list: '{  X = FXY(X,Y,0);  }' of macro: proc
+  - log: parsing replacement list: '(((x) >> 24) & 0xffU)  /* most  significant byte */' of macro: MSB
+  - log: parsing replacement list: 'X+100' of macro: INSIDE_FUN
+  - log: checking the dependency order of macro A
+./header1.h:
+  - log: parsing replacement list: '1' of macro: header11_macro
+  - log: checking the dependency order of macro header11_macro
+./header2.h:
+  - log: parsing replacement list: 'x = x+y' of macro: header1_macro
+  - log: parsing replacement list: 'x[y]' of macro: header3_macro
+  - log: checking the dependency order of macro header1_macro(x,y)

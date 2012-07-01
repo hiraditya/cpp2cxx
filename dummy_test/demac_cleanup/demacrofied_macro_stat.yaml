@@ -1,0 +1,27 @@
+###################################################################
+#This file contains the details of each macro processed by the demacrofier
+#The file can be read by any yaml parser
+#The format is as follows:
+#file-name:#  - id: identifier string
+###################################################################
+./example.cpp:
+  - id:depth0
+  - id:a
+  - id:b
+  - id:_c
+  - id:_a
+  - id:FXY
+  - id:fun
+  - id:INSIDE_FUN_SUPER
+  - id:proc
+  - id:MSB
+  - id:SSB
+  - id:TSB
+  - id:LSB
+  - id:INSIDE_FUN
+./header1.h:
+  - id:header11_macro
+  - id:header12_macro
+./header2.h:
+  - id:header1_macro
+  - id:header3_macro

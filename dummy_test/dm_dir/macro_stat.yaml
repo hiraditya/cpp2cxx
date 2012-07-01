@@ -1,0 +1,91 @@
+###################################################################
+#This file contains the details of each macro present in the files processed
+#The file can be read by any yaml parser
+#The format is as follows:
+#macro<count>
+#  - m_id : identifier string
+#  - m_cat: macro_category
+#  - c_cat: if the replacement text maps to C++ expression then c_cat is complete otherwise partial
+#  - d_cat: if the replacement text contains free variable(s) then d_cat is dependent otherwise closed
+###################################################################
+- Total_Macros: 13
+- Total_Function_Like_Macros: 10
+- Total_Object_Like_Macros: 3
+- macro00000000:
+  - m_id : A
+  - m_cat: object_like
+  - c_cat: complete
+  - d_cat: closed
+
+- macro00000001:
+  - m_id : _c(i)
+  - m_cat: function_like
+  - c_cat: complete
+  - d_cat: closed
+
+- macro00000002:
+  - m_id : _a(i)
+  - m_cat: function_like
+  - c_cat: complete
+  - d_cat: closed
+
+- macro00000003:
+  - m_id : CRYPTOPP_X86_ASM_AVAILABLE
+  - m_cat: null_define
+  - c_cat: complete
+  - d_cat: closed
+
+- macro00000004:
+  - m_id : FXY(X,Y,Z)
+  - m_cat: function_like
+  - c_cat: complete
+  - d_cat: closed
+
+- macro00000005:
+  - m_id : fun()
+  - m_cat: function_like
+  - c_cat: complete
+  - d_cat: dependent
+
+- macro00000006:
+  - m_id : INSIDE_FUN_SUPER(X,Y)
+  - m_cat: function_like
+  - c_cat: complete
+  - d_cat: dependent
+
+- macro00000007:
+  - m_id : proc(X,Y)
+  - m_cat: function_like
+  - c_cat: complete
+  - d_cat: closed
+
+- macro00000008:
+  - m_id : MSB(x)
+  - m_cat: function_like
+  - c_cat: complete
+  - d_cat: closed
+
+- macro00000009:
+  - m_id : INSIDE_FUN(X)
+  - m_cat: function_like
+  - c_cat: complete
+  - d_cat: closed
+
+- macro00000010:
+  - m_id : header11_macro
+  - m_cat: object_like
+  - c_cat: complete
+  - d_cat: closed
+
+- macro00000011:
+  - m_id : header1_macro(x,y)
+  - m_cat: function_like
+  - c_cat: complete
+  - d_cat: closed
+
+- macro00000012:
+  - m_id : header3_macro(x,y)
+  - m_cat: function_like
+  - c_cat: complete
+  - d_cat: closed
+

@@ -1,0 +1,1 @@
+#define Ptr(X) X*
