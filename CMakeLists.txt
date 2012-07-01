@@ -6,12 +6,10 @@ SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 SET(HEADER_OUTPUT_PATH ${PROJECT_BINARY_DIR}/include)
 
-#SET(CFE_PREFIX_PATH "/media/space/opt_149739_build")
-#SET(UTILITIES_PREFIX_PATH "/home/vmplanet/Documents/examples/cplusplus/fool/trunk/")
-
 #SET(CFE_PREFIX_PATH "/home/hiraditya/Documents/llvm/llvm-3.1/install")
 SET(CFE_PREFIX_PATH "/home/hiraditya/Documents/llvm/install")
-SET(UTILITIES_PREFIX_PATH "/home/hiraditya/Documents/fool")
+
+SET(UTILITIES_PREFIX_PATH ".")
 
 INCLUDE_DIRECTORIES("${UTILITIES_PREFIX_PATH}/general_utilities")
 INCLUDE_DIRECTORIES("${CFE_PREFIX_PATH}/include")
