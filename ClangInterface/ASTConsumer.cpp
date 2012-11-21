@@ -463,7 +463,7 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
     FrontendOptions& FEOpts = ci.getFrontendOpts();
 
     PP.getBuiltinInfo().InitializeBuiltins(PP.getIdentifierTable(),
-                                        PP.getLangOpts());
+                                        PP.getLangOptions());
     clang::InitializePreprocessor(PP, PPOpts, HSOpts, FEOpts);
     //astConsumer = new MyASTConsumer();
     ci.setASTConsumer(this);
