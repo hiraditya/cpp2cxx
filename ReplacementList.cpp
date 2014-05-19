@@ -47,8 +47,8 @@ void ReplacementList::set_replacement_list_str(std::string const& str,
   rl_str = str;
   if(!argId.empty()) {
     std::for_each(argId.begin(),argId.end(),
-      [&funArgId](std::pair<token_type,int> p_ti) {
-      funArgId.push_back(p_ti.first);
+      [this](std::pair<token_type,int> p_ti) {
+      this->funArgId.push_back(p_ti.first);
     });
   }
 //    std::cout<<"repl_string: "<<replacement_list_str<<std::endl;

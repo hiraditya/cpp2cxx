@@ -69,7 +69,7 @@ struct Node {
     ~Node()
     {
       std::for_each(vecMacro.begin(),vecMacro.end(),
-        [&vecMacro](PPMacro* mac) {
+        [](PPMacro* mac) {
           delete mac;
           mac=NULL;
         });

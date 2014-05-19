@@ -86,24 +86,24 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
     std::cout<<"\n\nSearch paths output from ASTConsumer:\n"<<search_paths;
 //    if(ci.hasSema())
 //      std::cout<<"Sema from start";
-    ci.createDiagnostics(0,NULL);
+    ci.createDiagnostics(0,nullptr);
     TargetOptions to;
     /// set the language to c++98
-    ci.getInvocation().setLangDefaults(clang::InputKind::IK_CXX,
+    ci.getInvocation().setLangDefaults(ci.getLangOpts(), clang::InputKind::IK_CXX,
                                        clang::LangStandard::lang_cxx11);
 
 //    if(ci.getInvocation().getLangOpts()->CPlusPlus)
 //      std::cout<<"c++ is defined now";
 
     to.Triple = llvm::sys::getDefaultTargetTriple();
-    TargetInfo *pti = TargetInfo::CreateTargetInfo(ci.getDiagnostics(), to);
+    TargetInfo *pti = TargetInfo::CreateTargetInfo(ci.getDiagnostics(), &to);
     ci.setTarget(pti);
 
     ci.createFileManager();
 //      if(ci.hasSema())
 //      std::cout<<"Sema before source manager";
     ci.createSourceManager(ci.getFileManager());
-    ci.createPreprocessor();
+    ci.createPreprocessor(clang::TranslationUnitKind::TU_Complete);
 
     /// \brief to enable parsing of exceptions by the clang front end
     ci.getLangOpts().CXXExceptions = 1;
@@ -141,7 +141,7 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
     std::for_each(search_paths.begin(), search_paths.end(),
                   [&HSOpts](std::string const& search_path) {
                   HSOpts.AddPath(search_path, clang::frontend::Angled,
-                                 false, false, false);
+                                 false, false);
                   });
 
 /// clang specific include
@@ -463,7 +463,7 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
     FrontendOptions& FEOpts = ci.getFrontendOpts();
 
     PP.getBuiltinInfo().InitializeBuiltins(PP.getIdentifierTable(),
-                                        PP.getLangOptions());
+                                        PP.getLangOpts());
     clang::InitializePreprocessor(PP, PPOpts, HSOpts, FEOpts);
     //astConsumer = new MyASTConsumer();
     ci.setASTConsumer(this);

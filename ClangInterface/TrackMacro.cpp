@@ -27,7 +27,7 @@ void TrackMacro::MacroExpands(const Token &MacroNameTok, const MacroInfo* MI,
   //std::cout<<"Macro "<<tok::getTokenName(MacroNameTok.getKind())<< " has expanded here\n\t";
   /// testing if the macro is defined in the same file
   /// so that global macros can be skipped
-  if(sm->isFromMainFile(MI->getDefinitionLoc())) {
+  if(sm->isInMainFile(MI->getDefinitionLoc())) {
     PresumedLoc presumed = sm->getPresumedLoc(Range.getBegin());
 #ifdef CLANG_AST_DEBUG
     std::cout<<"\nMacro "<<MacroNameTok.getIdentifierInfo()->getNameStart()
@@ -92,7 +92,7 @@ void TrackMacro::MacroDefined(const Token &MacroNameTok, const MacroInfo* MI)
 {
   //if(MacroIsLocal(MI->getDefinitionLoc())) {
   CollectedMacroInfo cmi;
-  if(sm->isFromMainFile(MI->getDefinitionLoc())) {
+  if(sm->isInMainFile(MI->getDefinitionLoc())) {
     PresumedLoc presumed = sm->getPresumedLoc(MI->getDefinitionLoc());
 
 #ifdef CLANG_AST_DEBUG

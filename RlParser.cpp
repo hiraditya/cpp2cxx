@@ -439,9 +439,9 @@ void RlParser::Expression8()
       //post increment operator
       rl_dcat = RlDCat::dependent;
       std::for_each(funArgId.begin(),funArgId.end(),
-        [&rl_dcat,it](token_type tok) {
-          if(*it == tok)
-            rl_dcat = RlDCat::independent;
+        [this](token_type tok) {
+          if(*this->it == tok)
+            this->rl_dcat = RlDCat::independent;
         });
       Match(T_IDENTIFIER);
       rl_ttype.reject_type = IsRejectPredefinedMacro(id_value.str());

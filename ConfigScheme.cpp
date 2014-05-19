@@ -76,8 +76,8 @@ void ConfigScheme::SetDemacroficationScheme(std::string const& demac_gran,
   pDemacroficationScheme->globalMacrosRaw = global_mac_raw;
   pDemacroficationScheme->globalMacrosFormatted = global_mac_formatted;
   std::for_each(mac_prev_demac.begin(),mac_prev_demac.end(),
-                [&pDemacroficationScheme](std::string const& str) {
-                pDemacroficationScheme->macrosPreventingDemacrofication.insert(str);
+                [this](std::string const& str) {
+                this->pDemacroficationScheme->macrosPreventingDemacrofication.insert(str);
                });
   pDemacroficationScheme->multipleDefinitions = multiple_definitions;
   pDemacroficationScheme->performCleanup = cleanup;

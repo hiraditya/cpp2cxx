@@ -9,7 +9,7 @@ add_definitions(-D__STDC_LIMIT_MACROS)
 ADD_DEFINITIONS(-D_GNU_SOURCE)
 #add_definitions(-DCLANG_AST_DEBUG)
 
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}  "-std=c++0x -fno-rtti -g")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}  "-std=c++11 -fno-rtti -g")
 #set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}  "-cc1")
 
 link_directories("${CFE_PREFIX_PATH}/lib")
@@ -19,7 +19,12 @@ add_library(ASTConsumer SHARED
     ASTConsumer.cpp
   )
 
-target_link_libraries(ASTConsumer  
- libclang
+target_link_libraries(ASTConsumer
+LLVMLTO LLVMObjCARCOpts LLVMLinker LLVMipo LLVMVectorize LLVMBitWriter LLVMIRReader LLVMAsmParser LLVMXCoreDisassembler LLVMXCoreCodeGen LLVMXCoreDesc LLVMXCoreInfo LLVMXCoreAsmPrinter LLVMSystemZDisassembler LLVMSystemZCodeGen LLVMSystemZAsmParser LLVMSystemZDesc LLVMSystemZInfo LLVMSystemZAsmPrinter LLVMSparcDisassembler LLVMSparcCodeGen LLVMSparcAsmParser LLVMSparcDesc LLVMSparcInfo LLVMSparcAsmPrinter LLVMR600CodeGen LLVMR600Desc LLVMR600Info LLVMR600AsmPrinter LLVMPowerPCDisassembler LLVMPowerPCCodeGen LLVMPowerPCAsmParser LLVMPowerPCDesc LLVMPowerPCInfo LLVMPowerPCAsmPrinter LLVMNVPTXCodeGen LLVMNVPTXDesc LLVMNVPTXInfo LLVMNVPTXAsmPrinter LLVMMSP430CodeGen LLVMMSP430Desc LLVMMSP430Info LLVMMSP430AsmPrinter LLVMMipsDisassembler LLVMMipsCodeGen LLVMMipsAsmParser LLVMMipsDesc LLVMMipsInfo LLVMMipsAsmPrinter LLVMHexagonCodeGen LLVMHexagonAsmPrinter LLVMHexagonDesc LLVMHexagonInfo LLVMCppBackendCodeGen LLVMCppBackendInfo LLVMARMDisassembler LLVMARMCodeGen LLVMARMAsmParser LLVMARMDesc LLVMARMInfo LLVMARMAsmPrinter LLVMARM64Disassembler LLVMARM64CodeGen LLVMARM64AsmParser LLVMARM64Desc LLVMARM64Info LLVMARM64AsmPrinter LLVMARM64Utils LLVMAArch64Disassembler LLVMAArch64CodeGen LLVMAArch64AsmParser LLVMAArch64Desc LLVMAArch64Info LLVMAArch64AsmPrinter LLVMAArch64Utils LLVMTableGen LLVMDebugInfo LLVMOption LLVMX86Disassembler LLVMX86AsmParser LLVMX86CodeGen LLVMSelectionDAG LLVMAsmPrinter LLVMMCParser LLVMX86Desc LLVMX86Info LLVMX86AsmPrinter LLVMX86Utils LLVMJIT LLVMLineEditor LLVMMCDisassembler LLVMInstrumentation LLVMInterpreter LLVMCodeGen LLVMScalarOpts LLVMInstCombine LLVMTransformUtils LLVMipa LLVMAnalysis LLVMProfileData LLVMMCJIT LLVMTarget LLVMRuntimeDyld LLVMExecutionEngine LLVMMC LLVMObject LLVMBitReader LLVMCore LLVMSupport
+clangFrontendTool clangFrontend clangDriver clangSerialization clangCodeGen
+clangParse clangSema clangStaticAnalyzerFrontend clangStaticAnalyzerCheckers
+clangStaticAnalyzerCore clangAnalysis clangARCMigrate clangRewriteFrontend clangRewriteCore
+clangEdit clangAST clangLex clangBasic
+#clangAnalysis clangAST clangASTMatchers clangBasic clangCodeGen clangDriver clangDynamicASTMatchers clangEdit clangFrontend clangLex clangParse clangSema clangTooling clang
+pthread z dl
   )
-

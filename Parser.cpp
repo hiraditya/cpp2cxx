@@ -698,9 +698,9 @@ void Parser::Demacrofy(std::ostream& stat, bool multiple_definitions_allowed)
         pm_iter = pTree->GetMacro(*it);
         /// to be looked for exact macro
         std::for_each(pm_iter.first,pm_iter.second,
-          [it,&m_ptr,&defn_counter](std::pair<token_type,PPMacro*> tm_pair) {
+          [this,&m_ptr,&defn_counter](std::pair<token_type,PPMacro*> tm_pair) {
             ++defn_counter;
-            if(tm_pair.first.get_position() == it->get_position())
+            if(tm_pair.first.get_position() == this->it->get_position())
               m_ptr = tm_pair.second;
           });
         // if there was no match then throw error, although it is unlikely

@@ -132,8 +132,8 @@ void DepAnalyzer<Vertex_t>::DoTopologicalSort(std::vector<Vertex_t*>& v)
   typename std::vector<Vd_t> topo_order;
   boost::topological_sort(depGraph,std::back_inserter(topo_order));
   std::for_each(topo_order.begin(),topo_order.end(),
-                [&v,&depGraph](Vd_t vd) {
-                  v.push_back(depGraph[vd]);
+                [&v, this](Vd_t vd) {
+                  v.push_back(this->depGraph[vd]);
                 });
 #ifdef DEBUG_MACRO_DEPENDENCY      
   std::cout<<"Printing the total order:\n";
