@@ -243,20 +243,20 @@ ReplacementList const& PPMacro::get_replacement_list() const
 { return rep_list; }
 
 
-PPOperation const PPMacro::get_operation() const
+PPOperation PPMacro::get_operation() const
 { return operation; }
 
 
-MacroCategory const PPMacro::get_macro_category() const
+MacroCategory PPMacro::get_macro_category() const
 { return m_cat; }
 
 
-RlDCat const 
+RlDCat
 PPMacro::get_replacement_list_dependency_category() const
 { return rep_list.get_replacement_list_dependency_category(); }
 
 
-RlCCat const 
+RlCCat
 PPMacro::get_replacement_list_closure_category() const
 { return rep_list.get_replacement_list_closure_category(); }
 

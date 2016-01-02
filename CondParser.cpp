@@ -356,7 +356,7 @@ void CondParser::Expression8()
     case T_FIXEDPOINTLIT:  // IDL specific    
       Match(id);
       //to bypass <lit>e<+/-><lit><id>
-      if(Match(T_IDENTIFIER));
+      if(Match(T_IDENTIFIER)) {} // Empty
       break;
     case T_CHARLIT:
     case T_STRINGLIT:

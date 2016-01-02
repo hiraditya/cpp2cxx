@@ -66,10 +66,10 @@ class ReplacementList {
     std::string const& get_replacement_list_str_with_comments() const;
     std::vector<token_type> const& get_replacement_list_tokens() const;
 
-    RlDCat const 
+    RlDCat
     get_replacement_list_dependency_category() const;
 
-    RlCCat const 
+    RlCCat
     get_replacement_list_closure_category() const;
     
     RlTokType const&

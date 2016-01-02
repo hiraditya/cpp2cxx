@@ -8,7 +8,7 @@ SET(HEADER_OUTPUT_PATH ${PROJECT_BINARY_DIR}/include)
 
 #SET(CFE_PREFIX_PATH "/home/hiraditya/Documents/llvm/llvm-3.1/install")
 #SET(CFE_PREFIX_PATH "/media/space/opt_149739_build")
-SET(CFE_PREFIX_PATH "/home/hiraditya/work/llvm/install")
+SET(CFE_PREFIX_PATH "/home/hiraditya/work/llvm/install-release")
 #SET(LLVM_PATH "/home/hiraditya/work/llvm/install")
 #SET(LLVM_PATH2 "/home/hiraditya/work/llvm/build")
 #SET(CFE_PREFIX_PATH "/home/hiraditya/Documents/llvm/install")

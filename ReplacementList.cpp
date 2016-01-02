@@ -98,13 +98,13 @@ ReplacementList::get_replacement_list_tokens() const
   return rl_tokens;
 }
 
-RlDCat const 
+RlDCat
 ReplacementList::get_replacement_list_dependency_category() const
 { 
   return rl_dcat;
 }
 
-RlCCat const 
+RlCCat
 ReplacementList::get_replacement_list_closure_category() const
 { 
   return rl_ccat;

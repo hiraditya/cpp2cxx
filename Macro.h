@@ -102,8 +102,8 @@ class PPMacro
 
     ReplacementList& get_replacement_list();
     ReplacementList const& get_replacement_list() const;
-    PPOperation const get_operation() const;
-    MacroCategory const get_macro_category() const;
+    PPOperation get_operation() const;
+    MacroCategory get_macro_category() const;
 
     bool is_function_like() const
     { return m_cat == MacroCategory::function_like; }
@@ -111,10 +111,10 @@ class PPMacro
     bool is_object_like() const
     { return m_cat == MacroCategory::object_like; }
 
-    RlDCat const 
+    RlDCat
     get_replacement_list_dependency_category() const;
 
-    RlCCat const 
+    RlCCat
     get_replacement_list_closure_category() const;
     
     std::list<token_type>
