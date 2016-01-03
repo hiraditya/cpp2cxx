@@ -87,7 +87,6 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
 //    if(ci.hasSema())
 //      std::cout<<"Sema from start";
     ci.createDiagnostics(0,nullptr);
-    TargetOptions to;
     /// set the language to c++98
     ci.getInvocation().setLangDefaults(ci.getLangOpts(), clang::InputKind::IK_CXX,
                                        clang::LangStandard::lang_cxx11);
@@ -95,8 +94,8 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
 //    if(ci.getInvocation().getLangOpts()->CPlusPlus)
 //      std::cout<<"c++ is defined now";
 
-    to.Triple = llvm::sys::getDefaultTargetTriple();
-    TargetInfo *pti = TargetInfo::CreateTargetInfo(ci.getDiagnostics(), &to);
+    TargetInfo *pti = TargetInfo::CreateTargetInfo(ci.getDiagnostics(), ci.getInvocation().TargetOpts);
+
     ci.setTarget(pti);
 
     ci.createFileManager();
@@ -460,22 +459,28 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
               clang::frontend::Angled,
               false,    false,    false);
 */
-    FrontendOptions& FEOpts = ci.getFrontendOpts();
+    const FrontendOptions& FEOpts = ci.getFrontendOpts();
+    const auto &PCHHR = ci.getPCHContainerReader();
 
     PP.getBuiltinInfo().InitializeBuiltins(PP.getIdentifierTable(),
-                                        PP.getLangOpts());
-    clang::InitializePreprocessor(PP, PPOpts, HSOpts, FEOpts);
+                                           PP.getLangOpts());
+    ApplyHeaderSearchOptions(PP.getHeaderSearchInfo(), HSOpts,
+                             PP.getLangOpts(), PP.getTargetInfo().getTriple());
+
+    clang::InitializePreprocessor(PP, PPOpts, PCHHR, FEOpts);
+
+    std::unique_ptr<ASTConsumer> Consumer (new MyASTConsumer);
     //astConsumer = new MyASTConsumer();
-    ci.setASTConsumer(this);
+    ci.setASTConsumer(std::move(Consumer));
 
     ci.createASTContext();
 
 /// pass the callback function
 
-    track_macro = new clang::TrackMacro;
+    std::unique_ptr<clang::TrackMacro> track_macro(new clang::TrackMacro);
     track_macro->SetCompilerInstance(&ci);
-    PP.addPPCallbacks(track_macro);
-///
+    PP.addPPCallbacks(std::move(track_macro));
+
     return 0;
 }
 
@@ -484,9 +489,14 @@ void MyASTConsumer::DumpContent(std::string const& file_name)
   CompilerInstance& ci = *pci;
   current_file = file_name;
 
+  // Kind is C_User for now because I do not know how to set the righ option,
+  // this does not matter so much, I think it is only used to selectively
+  // emit/ignore compiler warnings.
+  clang::SrcMgr::CharacteristicKind Kind = clang::SrcMgr::C_User;
+
   //std::cout<<"Current file name in AST comsumer is: "<<current_file;
   const FileEntry *pFile = ci.getFileManager().getFile(file_name.c_str());
-  ci.getSourceManager().createMainFileID(pFile);
+  ci.getSourceManager().createFileID(pFile, SourceLocation(), Kind);
   // set file and loc parameters for the track_macro callback
   // placing here is important. It should be after the source manager
   // has created fileid for the file to be processed.

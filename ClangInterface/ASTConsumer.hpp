@@ -42,13 +42,10 @@ class MyASTConsumer : public clang::ASTConsumer
 public:
     MyASTConsumer() : clang::ASTConsumer() 
     { 
-      //CompilerInstance* pci = new CompilerInstance;
     }
 
     ~MyASTConsumer() 
     { 
-      //delete track_macro;
-      //track_macro=NULL;
     }
 
     virtual bool HandleTopLevelDecl(clang::DeclGroupRef d);
@@ -70,8 +67,9 @@ private:
     /// the delete operator should not be called on track_macro
     /// because it is added to a reference counted Preprocessor class
     clang::TrackMacro* track_macro;
-    //clang::TrackMacro track_macro;
+
     std::string current_file;
+
     /// \brief clang::Info is defined by me
     std::map<std::string, ParsedDeclInfo> FunctionInfo;
 };
