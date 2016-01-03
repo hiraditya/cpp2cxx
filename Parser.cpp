@@ -30,25 +30,15 @@ limitations under the License.
 #include "DemacroficationScheme.h"
 
 #include "vector_utils.hpp"
+#include "debug.h"
 
-//read the file name
-//call the srcML parser with this file name
-//read the parsed srcML file
-//look for macros
-//take the line and give it to boost_wave for tokenizing
-//
+// Read the file name and then look for macros.
+// Take the line and give it to boost_wave for tokenizing.
+
 #include <fstream>
-#include <algorithm> //for_each
+#include <algorithm>
 #include <assert.h>
 
-//#include <iomanip> //setw setfill
-#if  defined(DEBUG_CONDITIONALS) || defined(DEBUG_PARSER) \
-|| defined(BUILD_NEW_MACRO_LIST) || defined(ENABLE_WARNING) \
-|| defined(DEBUG_MACRO_DEPENDENCY) || defined(DEBUG_CLEANUP_CODE)
-
-#include <iostream>
-
-#endif
 Parser::Parser(DemacroficationScheme const& demacrofication_scheme,
                std::ostream& log_file, std::ostream& macro_list_file)
   :pDemacroficationScheme(&demacrofication_scheme),
@@ -61,9 +51,9 @@ Parser::Parser(DemacroficationScheme const& demacrofication_scheme,
    object_like_count(0),
    function_like_count(0)
 {
-/// @todo complete this function
-/// @todo dispatch components of demacrofication_scheme to relevant
-/// classes.
+  /// @todo complete this function
+  /// @todo dispatch components of demacrofication_scheme to relevant
+  /// classes.
   if(pDemacroficationScheme->globalMacrosFormatted.size()) {
     fileGlobalMacros = pDemacroficationScheme->globalMacrosFormatted;
     ReadGlobalMacros(fileGlobalMacros);
@@ -71,12 +61,12 @@ Parser::Parser(DemacroficationScheme const& demacrofication_scheme,
   else {
     /// @todo supply the file name of formatted global macros
     /// from the main function, hardcoding the name here is not a good idea
-    /// @todo check:: previously the file name was gMacros.dat. I have changed it...
+    /// @todo check:: previously the file name was gMacros.dat. I've changed it.
     fileGlobalMacros = "gConditions.h";
     ParseNewGlobalMacros(pDemacroficationScheme->globalMacrosRaw);
   }
-  //passing the file containing global macros so that it can make a list
-  //which is useful in determining if a conditional macro uses global macros
+  // passing the file containing global macros so that it can make a list
+  // which is useful in determining if a conditional macro uses global macros
   cp = new CondParser(fileGlobalMacros);
   rp = new RlParser(demacrofication_scheme,log_file);
   demac = new Demacrofier;
@@ -92,7 +82,7 @@ Parser::~Parser()
 
   using namespace general_utilities;
   mlFile<<vec_macro_stat;
-
+  //delete pTree;
   delete cp;
   delete rp;
   delete demac;
@@ -161,14 +151,12 @@ void Parser::ReadGlobalMacros(std::string const& global_macro_file_name)
       gMacros.getline(sc,line_width);
     }
     gMacros.close();
-  #ifdef DEBUG_CONDITIONALS1
-    std::for_each(globalMacros.begin(),globalMacros.end(),
-    [&logFile](std::pair<std::string,std::string> gm) {
-      logFile << "  - log: "<<gm.first <<" "<< gm.second<<std::endl;
-    } );
-  #endif
-  }
-  catch(ExceptionHandler& e) {
+
+    DEBUG_CONDITIONALS1(std::for_each(globalMacros.begin(), globalMacros.end(),
+                         [this](std::pair<std::string, std::string> gm) {
+                                    logFile << "  - log: " << gm.first
+                                            << " " << gm.second << "\n";}););
+  } catch(ExceptionHandler& e) {
     logFile << "  - error: "<<e.GetMessage()<<"\n";
     throw;
   }
@@ -220,12 +208,10 @@ void Parser::ParseNewGlobalMacros(std::string const& raw_global_macro_file_name)
       logFile<<"  - error: "<<e.GetMessage()<<"\n";
     throw;
   }
-#ifdef DEBUG_CONDITIONALS1
-  std::for_each(globalMacros.begin(),globalMacros.end(),
-  [&logFile](std::pair<std::string,std::string> gm) {
-    logFile <<"  - log: " <<gm.first <<" "<< gm.second<<"\n";
-  } );
-#endif
+  DEBUG_CONDITIONALS1(std::for_each(globalMacros.begin(),globalMacros.end(),
+                      [this](std::pair<std::string,std::string> gm) {
+                       logFile << "  - log: " << gm.first
+                               <<" "<< gm.second << "\n";}););
 }
 
 void Parser::ParseMacros(MacroList_t& macro_list)
@@ -237,9 +223,9 @@ void Parser::ParseMacros(MacroList_t& macro_list)
   id = *it;
   token_iterator ti_mac_begin;
   token_iterator ti_mac_end;
-  std::stringstream err_msg;  
   bool PPDEFINED = true;
   bool PPNOTDEFINED = false;
+
   while(it!=it_end) {
     id = boost::wave::token_id(*it);
     //so that we get a new tempNode and macro everytime
@@ -252,16 +238,12 @@ void Parser::ParseMacros(MacroList_t& macro_list)
         PPDefineHandler(macro_list,mac);
         ti_mac_end = it;
         pTree->PushBackMacro(mac);
-#ifdef DEBUG_PARSER
-        logFile <<"  - log: #define "<<mac.get_identifier_str()<<"\n";
-#endif
+        DEBUG_PARSER(logFile << "  - log: #define "
+                             << mac.get_identifier_str() << "\n";);
         break;
       case boost::wave::T_PP_IF:
         ++nesting_level;
-#ifdef DEBUG_PARSER
-        //logFile<<"nesting_level = "<<nesting_level<<"\n";
-        logFile << "  - log: \nFound #if directive:\n";
-#endif
+        DEBUG_PARSER(logFile << "  - log: \nFound #if directive:\n";);
         tempNode.key = *it;
         PPIfHandler(tempNode);
         pTree->MakeChild(tempNode);
@@ -344,11 +326,10 @@ bool Parser::PPCheckIdentifier(std::string const& id_value) const
 
 bool Parser::PPCheckIdentifier(std::string const& id_str,MacroList_t const& macro_list) const
 {
-#ifdef DEBUG_CONDITIONALS
-  logFile<<"  - log: \nlooking for the identifier: "<<id_str<<"\n";
+  DEBUG_CONDITIONALS(logFile<<"  - log: \nlooking for the identifier: "<<id_str<<"\n";
 //  logFile<<"size of globalMacros: "<<macro_list.size()
 //           <<"first element: "<<macro_list.begin()->first<<"\n";
-#endif  
+  );
   if(macro_list.find(id_str)!=macro_list.end())
     return true;
   else
@@ -451,9 +432,7 @@ void Parser::PPDefineHandler(MacroList_t& macro_list, PPMacro& macro_ref)
       macro_ref.AnalyzeIdentifier();
     }
   } catch(ExceptionHandler& e) {
-#ifdef ENABLE_WARNING    
-    logFile<<"  - error: "<<e.GetMessage()<<"\n";
-#endif
+    ENABLE_WARNING(logFile<<"  - error: "<<e.GetMessage()<<"\n";);
   }
   //skip spaces until we find the replacement text
   while ((id = *it) == boost::wave::T_SPACE) {
@@ -532,12 +511,10 @@ void Parser::PPDefineHandler(MacroList_t& macro_list, PPMacro& macro_ref)
   macro_ref.set_macro_stat();
   vec_macro_stat.push_back(*macro_ref.get_macro_stat());
 
-#ifdef DEBUG_CONDITIONALS  
-  logFile<<"  - log: id = "
-           <<id_value.str()
-           <<"\trep list = "
-           <<rep_list_str.str()<<'\n';
-#endif
+  DEBUG_CONDITIONALS(logFile<<"  - log: id = "
+                            <<id_value.str()
+                            <<"\trep list = "
+                            <<rep_list_str.str()<<'\n';);
 }
 
 /**
@@ -592,17 +569,14 @@ void Parser::PPIfHandler(Node& node, bool def)
   id_value<<it->get_value();
   if(PPCheckIdentifier(id_value.str(),globalMacros)) {
       condCat = CondCategory::config;
-#ifdef DEBUG_CONDITIONALS
-      logFile<<"  - log: config_condition: "<<id_value.str()<<"\n";
-#endif      
-    }
-  else {
+      DEBUG_CONDITIONALS(logFile<<"  - log: config_condition: "
+                                <<id_value.str()<<"\n";);
+  } else {
     condCat = CondCategory::local;
-#ifdef DEBUG_CONDITIONALS    
-    logFile<<"  - log: local_condition: "<<id_value.str()<<"\n";
-#endif
+    DEBUG_CONDITIONALS(logFile<<"  - log: local_condition: "
+                              <<id_value.str()<<"\n";);
   }
-  
+
   node.condStmt = condStmt;
   node.condCat = condCat;
 
@@ -636,15 +610,14 @@ void Parser::PPBuildMacroDependencyList(std::ostream& os)
 //vector of pairs to retain the order in which they occur
 //also defined in the DepGraph.h
 //typedef std::vector<std::pair<PPMacro*,std::vector<PPMacro*> > > DepList_t;
-  
+
   DepList_t const& dl = pTree->BuildMacroDependencyList();
   try {
   DepAnalyzer<PPMacro> macro_dep(dl);
   macro_dep.MakeGraph();
-#ifdef DEBUG_MACRO_DEPENDENCY      
-  logFile<<"  - log: Inserting macros to the property map:\n";
-  macro_dep.PrintEdges();
-#endif
+  DEBUG_MACRO_DEPENDENCY(logFile<<"  - log: Inserting macros to the property map:\n";
+                         macro_dep.PrintEdges(););
+
   macro_dep.DoTopologicalSort(v);
   macro_dep.CheckTotalOrder(os);
   } catch(ExceptionHandler& e) {
@@ -715,19 +688,24 @@ void Parser::Demacrofy(std::ostream& stat, bool multiple_definitions_allowed)
           logFile<<"  - error: "<<"multiple definitions of macro: \'"
                  <<it->get_value()<<"\' found, so not demacrofying. "
                  <<"to demacrofy set appropriate configuration.\n";
-          demacrofied_string = demac->Translate(m_ptr,stat,pDemacroficationScheme->performCleanup, false);
+          demacrofied_string
+                  = demac->Translate(m_ptr, stat,
+                                     pDemacroficationScheme->performCleanup,
+                                     false);
         }
         else{
           /// now we have the exact match, so demacrofy
-          demacrofied_string = demac->Translate(m_ptr, stat,
-                                                pDemacroficationScheme->performCleanup, true);
+          demacrofied_string
+                  = demac->Translate(m_ptr, stat,
+                                     pDemacroficationScheme->performCleanup,
+                                     true);
         }
 
         outStream<<demacrofied_string;
 
-#ifdef DEBUG_CLEANUP_CODE
-        std::cout<<"\nPrinting the demacrofied string::\n"<<demacrofied_string<<"\n\n";
-#endif
+        DEBUG_CLEANUP_CODE(dbgs() << "\nPrinting the demacrofied string::\n"
+                                  << demacrofied_string<<"\n\n");
+
         /// @todo call the observer class here for the compilation
         it = GoPastMacro(it);
         break;
@@ -738,10 +716,8 @@ void Parser::Demacrofy(std::ostream& stat, bool multiple_definitions_allowed)
           if(post_demac_iter != demac->readyQueue.end()){
             //std::cout<<"\nline number:"<<it->get_position().get_line();
             outStream<<post_demac_iter->second;
-
-#ifdef DEBUG_CLEANUP_CODE
-            std::cout<<"\nPrinting the posponed string\n"<<post_demac_iter->second<<"\n\n";
-#endif
+            DEBUG_CLEANUP_CODE(dbgs() <<"\nPrinting the posponed string\n"
+                                      <<post_demac_iter->second<<"\n\n");
             // remove that postponed demac string from the readyQueue
             demac->readyQueue.erase(post_demac_iter);
           }
@@ -769,15 +745,16 @@ token_iterator Parser::GoPastMacro(token_iterator it)
 
 MacTree const* Parser::GetMacTree()
 {
+  assert (pTree);
   return pTree;
 }
 
 void Parser::InitializeMacTree()
 {
-  if(pTree){
-    //std::cout<<"deleting the MacTree with " << pTree->GetNumNodes()<<" nodes\n";
-    delete pTree;
-    pTree = NULL;
+  if(pTree) {
+    DEBUG(std::cout<<"deleting the MacTree with " << pTree->GetNumNodes()<<" nodes\n");
+    //delete pTree;
+    //pTree = NULL;
   }
   pTree = new MacTree;
 }

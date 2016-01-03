@@ -27,16 +27,13 @@ limitations under the License.
 #include "DemacBoostWaveIncludes.h"
 #include "RlCategory.h"
 #include "string_utils.hpp"
+#include "debug.h"
 
 #include <vector>
 #include <sstream>
 #include <string>
 #include <iomanip>
 #include <fstream>
-
-#ifdef DEBUG_DEMACROFIER
-#include <iostream>
-#endif
 
 Demacrofier::Demacrofier()
   :headerGuard("#if defined(__cplusplus) && defined(__GXX_EXPERIMENTAL_CXX0X__)"),
@@ -55,9 +52,8 @@ std::string Demacrofier::Translate(PPMacro const* m_ptr, std::ostream& stat, boo
   std::stringstream macro_iden;
   std::stringstream err_msg;
 
-#ifdef DEBUG_DEMACROFIER  
-  std::cout<<"Inside Demacrofier\n";
-#endif
+  DEBUG_DEMACROFIER(dbgs() << "Inside Demacrofier\n";);
+
   //in case not demacrofiable return the original_str
   //take the function str and the replacement list from *m_ptr
   original_str = "#define " + m_ptr->get_identifier_str()
@@ -70,10 +66,9 @@ std::string Demacrofier::Translate(PPMacro const* m_ptr, std::ostream& stat, boo
 
   //during the cleanup phase see if the macro was validated or not
   if(cleanup && (pValidaMacros->find(unique_macro_switch) == pValidaMacros->end())){
-#ifdef DEBUG_DEMACROFIER
-      std::cout<<"\nSearched for macro-switch: "<<macro_header_guard.str()<<", not found.";
-      std::cout<<"\nMacro: \'"<<macro_iden.str()<<"\' will not be translated\n";
-#endif
+    DEBUG_DEMACROFIER(
+      dbgs() << "\nSearched for macro-switch: " << unique_macro_switch << ", not found.";
+      dbgs() << "\nMacro: \'" << macro_iden.str() << "\' will not be translated\n";);
       demacrofy = false;
   }
 
@@ -84,16 +79,14 @@ std::string Demacrofier::Translate(PPMacro const* m_ptr, std::ostream& stat, boo
     demacrofied_fstream << demacrofied_str;
   }
   else {
-#ifdef DEBUG_DEMACROFIER
-    std::cout<<"replacement_list_closure_category::open";
-#endif
+    DEBUG_DEMACROFIER(dbgs() << "replacement_list_closure_category::open";);
     return original_str;
   }//endif RlCCat and RlDCat test
 
   //should be after the previous if stmt as the previous one tests for boolean demacrofy
   if(cleanup){
     outstr = GenerateTranslation(macro_iden.str(), unique_macro_switch, demacrofied_fstream.str());
-    stat<<"  - id:"<<macro_iden.str()<<"\n";
+    stat << "  - id:" << macro_iden.str() << "\n";
   }
   else{
     outstr = SuggestTranslation(unique_macro_switch, demacrofied_fstream.str(), original_str);
@@ -111,14 +104,14 @@ std::string Demacrofier::Translate(PPMacro const* m_ptr, std::ostream& stat, boo
         <<unique_macro_switch<<"\n";
   }
 
-#ifdef DEBUG_DEMACROFIER
-  std::cout<<"\noriginal_str: "<<original_str<<"\n";
-  std::cout<<"demacrofied_str: "<<outstr<<"\n";
-#endif
+DEBUG_DEMACROFIER(
+  dbgs() << "\noriginal_str: " << original_str << "\n";
+  dbgs() << "demacrofied_str: " << outstr << "\n";
+);
   if(postponed){
-    //std::cout<<"\nPutting macro: "
-    //         <<macro_iden.str()
-    //         <<", into ready queue:\n"<<outstr;
+    //std::cout << "\nPutting macro: "
+    //          << macro_iden.str()
+    //          << ", into ready queue:\n" << outstr;
     InsertToReadyQueue(macro_iden, outstr);
     return "";
   }
@@ -530,9 +523,7 @@ std::string Demacrofier::SuggestTranslation(std::string const& unique_macro_swit
          + "#else\n"
          + original_str
          + "#endif\n\n";
-#ifdef DEBUG_SUGGESTION
-//  std::cout<<"\nsuggested translation is:\n"<<str;
-#endif
+  DEBUG_SUGGESTION(dbgs() << "\nsuggested translation is:\n" << str;);
   return str;
 }
 
@@ -573,10 +564,8 @@ bool Demacrofier::CollectDemacrofiedString(PPMacro const* m_ptr, std::string& de
       demacrofied_str = DemacrofyFunctionLikePostponed(m_ptr);
       postponed = true;
 
-#ifdef DEGUG_SUGGESTION
-    std::cout<<"\nThis macro is inside function"<<demacrofied_str;
-#endif
-
+      DEBUG_SUGGESTION(dbgs() << "\nThis macro is inside function"
+                              << demacrofied_str;);
     }
     else demacrofied_str = DemacrofyFunctionLike(m_ptr);
   }
@@ -590,9 +579,6 @@ bool Demacrofier::CollectDemacrofiedString(PPMacro const* m_ptr, std::string& de
     }
     else demacrofied_str = DemacrofyObjectLike(m_ptr);
   }
-#ifdef DEGUG_SUGGESTION
-  if(postponed)
-      std::cout<<"\npostponed for this macro";
-#endif
+  DEBUG_SUGGESTION(if(postponed) dbgs() << "\npostponed for this macro";);
   return postponed;
 }

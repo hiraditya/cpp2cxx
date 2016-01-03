@@ -35,13 +35,13 @@ public:
   {}
   
   ExceptionHandler(token_type const& tok, std::string msg)
-  {               
+  {
     std::stringstream err_msg;
-    err_msg << "  - note: ";
+    err_msg << "  - exception note: ";
     err_msg //<<tok.get_position().get_file()<<":"
             <<tok.get_position().get_line()<<":"
             <<tok.get_position().get_column()<<": ";
-    err_msg << msg;
+    err_msg << msg << "\n";
     message = err_msg.str();
   }
 
@@ -57,9 +57,9 @@ public:
     message = err_msg.str();    
   }
 */  
-  inline std::string GetMessage() 
+  inline const std::string& GetMessage() const
   { 
-    return message;     
+    return message;
   }
   inline int GetErrorCode() 
   { 

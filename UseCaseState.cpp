@@ -23,10 +23,6 @@ limitations under the License.
 #include "UseCaseState.h"
 #include "ExceptionHandler.h"
 
-#ifdef DEBUG_MACRO_USE_CASE
-#include <iostream>
-#endif
-
 int UseCaseState::PutToken(token_iterator tok_iter)
 {
   boost::wave::token_id id = boost::wave::token_id(*tok_iter);

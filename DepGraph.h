@@ -120,24 +120,24 @@ typedef std::multimap<token_type,PPMacro*,TokenOrder> TokenMacroMap_t;
 typedef std::pair<TokenMacroMap_t::iterator,
                   TokenMacroMap_t::iterator> PairMacroIter_t;
 
-  //first arg: type of adjacency list, second arg: backbone of graph
-  //Also defined in DepAnalyzer.h
+//first arg: type of adjacency list, second arg: backbone of graph
+//Also defined in DepAnalyzer.h
 typedef boost::adjacency_list<boost::listS, boost::vecS,
                                 boost::directedS,Node*> Graph_t;
-  //Also defined in DepAnalyzer.h                                
+//Also defined in DepAnalyzer.h
 typedef boost::graph_traits<Graph_t>::vertex_descriptor Vertex_t;
 
 typedef boost::graph_traits<Graph_t>::vertex_iterator VertexIterator_t;
 typedef boost::graph_traits<Graph_t>::out_edge_iterator OutEdgeIterator_t;
 
-  //since we are storing pointers no need of a multimap
+//since we are storing pointers no need of a multimap
 typedef std::map<Node*,Vertex_t,NodeOrder> NodeMap_t;
 
-  // vector of pairs to retain the order in which they occur
-  //also defined in the DepAnalyzer.h
+// vector of pairs to retain the order in which they occur
+//also defined in the DepAnalyzer.h
 typedef std::vector<std::pair<PPMacro*,std::vector<PPMacro*> > > DepList_t;
 
-  //not used rite now
+//not used rite now
 class DFSVisitor : public boost::default_dfs_visitor
 {
 public:

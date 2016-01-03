@@ -22,13 +22,10 @@ limitations under the License.
 
 #include "ReplacementList.h"
 #include "RlParser.h"
+#include "debug.h"
 
 #include <algorithm>
 #include <sstream>
-
-#ifdef DEBUG_RLPARSER
-#include <iostream>
-#endif
 
 ReplacementList::ReplacementList()
 :rl_ccat(RlCCat::open),
@@ -57,9 +54,7 @@ void ReplacementList::set_replacement_list_str(std::string const& str,
 void ReplacementList::set_replacement_list_category(RlParser & rl_parser)
 {
   //typedef replacement_list_token_category rl_tcat;
-#ifdef DEBUG_RLPARSER
-  std::cout<<"ReplacementList:"<<get_replacement_list_str();
-#endif
+  DEBUG_RLPARSER(std::cout<<"ReplacementList:"<<get_replacement_list_str(););
   rl_parser.Parse(*this);
 }
 

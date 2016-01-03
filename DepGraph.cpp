@@ -22,14 +22,11 @@ limitations under the License.
 
 #include "DepGraph.h"
 #include "ExceptionHandler.h"
+#include "debug.h"
 
 #include <algorithm> // make_pair
 #include <string>
 #include <sstream>
-
-#if defined(DEBUG_TREE) || defined(ENABLE_WARNING)
-#include <iostream>
-#endif
 
 Node* MacTree::GetParent(Node* const np)
 {
@@ -42,9 +39,7 @@ Vertex_t MacTree::GetParent(Vertex_t const v)
   Node* pn;
   cn = depGraph[v];
   pn = cn->parent;
-#ifdef DEBUG_TREE
-  std::cout<<"Parent nodeIndex: "<<pn->nodeIndex<<"\n";
-#endif  
+  DEBUG_TREE(dbgs()<<"Parent nodeIndex: "<<pn->nodeIndex<<"\n";);
   //std::map<Node*,Vertex_t,NodeOrder>::iterator nodeMap_iter;
   NodeMap_t::iterator nodeMap_iter = nodeMap.find(pn);
   return nodeMap_iter->second;
@@ -86,9 +81,7 @@ bool MacTree::IsRoot(Vertex_t const vd) const
 //sibling of the currently pointed vertex
 bool MacTree::MakeSibling(Node& rn)
 {
-#ifdef DEBUG_TREE
-  std::cout<<"\nMaking sibling: "<<rn.key.get_value()<<"\t"<<rn.key.get_position().get_line()<<"\n";
-#endif  
+  DEBUG_TREE(dbgs()<<"\nMaking sibling: "<<rn.key.get_value()<<"\t"<<rn.key.get_position().get_line()<<"\n";);  
   Vertex_t v_dummy;//faking
   Node* pn = new Node;
   *pn = rn;
@@ -111,20 +104,16 @@ bool MacTree::MakeSibling(Node& rn)
   bool new_edge =  boost::add_edge(u,v,depGraph).second;
   currVertex = nodeMap_iter-> second;
 
-#ifdef DEBUG_TREE
-  std::cout<<"Node Number: "<<depGraph[v]->nodeIndex<<"\n";
-  std::cout<<"n_ptr: allocated: "<<pn
-           <<"\tinserted: "<<nodeMap_iter->first<<"\n";
-#endif
+  DEBUG_TREE(dbgs()<<"Node Number: "<<depGraph[v]->nodeIndex<<"\n";
+             dbgs()<<"n_ptr: allocated: "<<pn
+                   <<"\tinserted: "<<nodeMap_iter->first<<"\n";);
   return new_edge;  
 }
 
 //child to the currently pointed vertex
 bool MacTree::MakeChild(Node& rn)
 {
-#ifdef DEBUG_TREE
-  std::cout<<"\nMaking child: "<<rn.key.get_value()<<"\t"<<rn.key.get_position().get_line()<<"\n";
-#endif    
+  DEBUG_TREE(dbgs()<<"\nMaking child: "<<rn.key.get_value()<<"\t"<<rn.key.get_position().get_line()<<"\n";);    
   Vertex_t v_dummy;//faking
   Node* pn = new Node;
   *pn = rn;
@@ -139,20 +128,16 @@ bool MacTree::MakeChild(Node& rn)
   //add edge returns a pair <edge_descriptor,bool>
   bool new_edge = boost::add_edge(currVertex,v,depGraph).second;
   currVertex = nodeMap_iter-> second;
-#ifdef DEBUG_TREE
-  std::cout<<"Node Number: "<<depGraph[v]->nodeIndex<<"\n";
-  std::cout<<"n_ptr: allocated: "<<pn
-           <<"\tinserted: "<<nodeMap_iter->first<<"\n";
-#endif  
+  DEBUG_TREE(dbgs()<<"Node Number: "<<depGraph[v]->nodeIndex<<"\n";
+             dbgs()<<"n_ptr: allocated: "<<pn
+                   <<"\tinserted: "<<nodeMap_iter->first<<"\n";);  
   return new_edge;
 }
 
 bool MacTree::MakeChild(Vertex_t parentV, Vertex_t childV)
 {
   currVertex = childV;
-#ifdef DEBUG_TREE
-  std::cout<<"\nMaking child\n";
-#endif  
+  DEBUG_TREE(dbgs()<<"\nMaking child\n";);  
   //return if the edge was created or it was already there
   return boost::add_edge(parentV,childV,depGraph).second;
 }
@@ -160,9 +145,7 @@ bool MacTree::MakeChild(Vertex_t parentV, Vertex_t childV)
 bool MacTree::MakeSibling(Vertex_t firstV,Vertex_t secondV)
 {
   currVertex = secondV;
-#ifdef DEBUG_TREE
-  std::cout<<"Making sibling\n";
-#endif  
+  DEBUG_TREE(dbgs()<<"Making sibling\n";);
   //return if the edge was created or it was already there
   Vertex_t v = GetParent(firstV);  
   return boost::add_edge(v,secondV,depGraph).second;
@@ -170,9 +153,7 @@ bool MacTree::MakeSibling(Vertex_t firstV,Vertex_t secondV)
 
 void MacTree::PushBackMacro(PPMacro& mac)
 {
-#ifdef DEBUG_TREE
-  std::cout<<"Pushing Macro: "<<mac.get_identifier_str()<<"\n";
-#endif    
+  DEBUG_TREE(dbgs()<<"Pushing Macro: "<<mac.get_identifier_str()<<"\n";);
   depGraph[currVertex]->PushBackMacro(mac);
   //get the pointer to the macro
   PPMacro* m_ptr;
@@ -196,10 +177,8 @@ DepList_t const& MacTree::BuildMacroDependencyList()
     m_ptr = *mp_iter;
     //every loop should have a new instance to do away with emptying
     std::vector<PPMacro*> vec_mp;
-#ifdef DEBUG_TREE
-  std::cout<<"Processing Macro: "<<m_ptr->get_identifier_str()<<"\n";
-#endif  
-    
+    DEBUG_TREE(dbgs()<<"Processing Macro: "<<m_ptr->get_identifier_str()<<"\n";);  
+
     id_list = m_ptr->get_replacement_list_dep_idlist();
     id_list_iter = id_list.begin();
     for(; id_list_iter != id_list.end();id_list_iter++) {
@@ -210,16 +189,14 @@ DepList_t const& MacTree::BuildMacroDependencyList()
           vec_mp.push_back(tmm_iter->second);//if macro found
         }
         else {//if not then throw the error
-          err_msg <<"Line Numver: "
-                  <<id_list_iter->get_position().get_line()
-                  << ":\nNo macro found for token: "
-                  <<id_list_iter->get_value()<<"\n";
+          err_msg << "Exception Line Number: "
+                  << id_list_iter->get_position().get_line()
+                  << ", No macro found for token: "
+                  << id_list_iter->get_value()<<"\n";
           throw ExceptionHandler(err_msg.str());
         }
       } catch(ExceptionHandler &e) {
-#ifdef ENABLE_WARNING
-        std::cerr<<e.GetMessage();
-#endif
+        std::cout<<e.GetMessage();;
       }
     }
     macroDepList.push_back(std::make_pair(m_ptr,vec_mp));
@@ -229,9 +206,7 @@ DepList_t const& MacTree::BuildMacroDependencyList()
 
 void MacTree::GotoParent()
 {
-#ifdef DEBUG_TREE
-  std::cout<<"Going to parent\n";
-#endif  
+  DEBUG_TREE(dbgs()<<"Going to parent\n";);
   currVertex = GetParent(currVertex);
 }
 
@@ -285,9 +260,7 @@ void MacTree::CheckToken(token_iterator tok_iter)
   //if there is no macro corresponding to this token
 
   if(pm_iter.first == pm_iter.second) {
-#ifdef DEBUG_MACRO_USE_CASE
-      std::cout<<"Putting token into the existing state:\n";
-#endif
+    DEBUG_MACRO_USE_CASE(dbgs()<<"Putting token into the existing state:\n";);
     //are we collecting tokens in a macro invocation
     if(macroUseCaseState.DoneCollection()) {
       return;

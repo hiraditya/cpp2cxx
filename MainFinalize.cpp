@@ -361,7 +361,7 @@ int main(int argc, char* argv[])
                 << global_macros_formatted << "\n";
     }
 
-#ifndef BUILD_NEW_MACRO_LIST    
+#ifndef BUILD_NEW_MACRO_LIST
     else
     {
       std::cerr<<"when BUILD_NEW_MACRO_LIST is not defined,"

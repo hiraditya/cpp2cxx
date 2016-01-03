@@ -54,16 +54,20 @@ int i = fun();
 int super(int i)
 {
 
+#if defined(__cplusplus) && defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(USE_INSIDE_FUN_SUPER_examplecpp_16_9)
+template <class _T1, class _T2> 
+auto INSIDE_FUN_SUPER(_T1 X, _T2 Y) -> decltype(X+100 + j)
+{
+  return X+100 + j;
+}
+#else
+#define INSIDE_FUN_SUPER(X,Y) X+100 + j
+#endif
+
 
   //variable 'j' referenced in macro INSIDE_FUN_SUPER 
   //the transformation has to be carefully placed after the declaration of 'int j'
   int j = 10;
-
-#if defined(__cplusplus) && defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(USE_INSIDE_FUN_SUPER_examplecpp_16_9)
-auto INSIDE_FUN_SUPER = [&j](decltype(10000) X, decltype( 4000) Y) { return X+100 + j; };
-#else
-#define INSIDE_FUN_SUPER(X,Y) X+100 + j
-#endif
 
   return INSIDE_FUN_SUPER(10000, 4000);
 }
@@ -103,12 +107,16 @@ int main()
   
 
 
-
 #if defined(__cplusplus) && defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(USE_INSIDE_FUN_examplecpp_42_9)
-auto INSIDE_FUN = [](decltype(105) X) { return X+100; };
+template <class _T1> 
+auto INSIDE_FUN(_T1 X) -> decltype(X+100)
+{
+  return X+100;
+}
 #else
 #define INSIDE_FUN(X) X+100
 #endif
+
 
   int infun = INSIDE_FUN(105)+a1;
 

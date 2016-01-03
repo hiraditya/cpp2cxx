@@ -25,11 +25,9 @@ limitations under the License.
 #include "RlParser.h"
 #include "ExceptionHandler.h"
 #include "vector_utils.hpp"
+#include "debug.h"
 
 #include <cctype> //for islower
-#if defined(ENABLE_WARNING) || defined(DEBUG_MACRO_CLASS)
-#include <iostream>
-#endif
 
 PPMacro::PPMacro(std::ostream& log_file)
 :identifier(boost::wave::T_UNKNOWN),
@@ -51,14 +49,13 @@ void PPMacro::put_tokens(std::vector<token_type> const& vec_tokens)
 {
   //macro_tokens will have atleast one element
   macro_tokens = vec_tokens;
-#ifdef DEBUG_MACRO_CLASS
+  DEBUG_MACRO_CLASS(
   std::cout<<"Tokens for Macro: "<<macro_tokens.begin()->get_value()<<"\n\t";
   std::for_each(macro_tokens.begin(),macro_tokens.end(),
                 [](token_type tok) {
                   std::cout<<tok.get_value();
   });
-  std::cout<<"\n";
-#endif
+  std::cout<<"\n";);
 }
 
 void PPMacro::set_identifier_parameters(token_type const& tok,
@@ -146,10 +143,9 @@ void PPMacro::set_use_case_string(std::vector<std::string>& vec_string)
          */
   if(!use_case_set){
     invoArgs = vec_string;
-#ifdef DEBUG_MACRO_USE_CASE
     using namespace general_utilities;
-    std::cout<<"Use case args for macro: "<< identifier_str << ":" <<invoArgs<<"\n";
-#endif
+    DEBUG_MACRO_USE_CASE(std::cout<<"Use case args for macro: "
+                                  << identifier_str << ":" <<invoArgs<<"\n";);
     use_case_set = true;
   }
 }
