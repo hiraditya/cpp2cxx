@@ -32,7 +32,7 @@ ADD_SUBDIRECTORY(ClangInterface)
 
 ###############################################################################
 # Compiler options
-SET(LLVM_CXXFLAGS "-fPIC -fvisibility-inlines-hidden -Wall -W -Wno-unused-parameter -Wwrite-strings -Wno-missing-field-initializers -pedantic -Wno-long-long -Wno-maybe-uninitialized -Wnon-virtual-dtor -Wno-comment -std=c++11 -ffunction-sections -fdata-sections -g")
+SET(LLVM_CXXFLAGS "-fPIC -fvisibility-inlines-hidden")
 IF(CMAKE_COMPILER_IS_GNUCXX)
   SET(CMAKE_CXX_FLAGS "-pedantic -Wall -std=c++11 -g ${LLVM_CXXFLAGS}")
   MESSAGE(STATUS "GCC detected - Adding compiler flags ${CMAKE_CXX_FLAGS}")

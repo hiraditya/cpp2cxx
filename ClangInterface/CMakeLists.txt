@@ -9,7 +9,7 @@ add_definitions(-D__STDC_LIMIT_MACROS)
 ADD_DEFINITIONS(-D_GNU_SOURCE)
 #add_definitions(-DCLANG_AST_DEBUG)
 
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}  "-std=c++11 -fno-rtti -g")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}  "-std=c++11 -fno-rtti -g -Wno-non-virtual-dtor")
 
 link_directories("${CFE_PREFIX_PATH}/lib")
 

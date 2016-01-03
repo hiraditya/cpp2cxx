@@ -491,7 +491,7 @@ void RlParser::Expression8()
     case T_FIXEDPOINTLIT:  // IDL specific    
       Match(id);
       //to bypass <lit>e<+/-><lit><id>
-      if(Match(T_IDENTIFIER));
+      if(Match(T_IDENTIFIER)) {} // Empty
       rl_ttype.literal_type = true;
       break;
     case T_CHARLIT:
