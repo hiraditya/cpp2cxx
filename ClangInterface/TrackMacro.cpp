@@ -1,5 +1,4 @@
 #include "TrackMacro.hpp"
-#include "clang-headers/Lex/MacroArgs.h"
 
 std::ostream& operator<<(std::ostream& os, const CollectedMacroInfo& cmi)
 {
@@ -21,11 +20,10 @@ std::ostream& operator<<(std::ostream& os, const CollectedMacroInfo& cmi)
 namespace clang {
 
 void TrackMacro::MacroExpands(const Token &MacroNameTok, const MacroInfo* MI,
-    SourceRange Range)//, MacroArgs* Args) in old versions
+                              SourceRange Range)
 {
-
   //std::cout<<"Macro "<<tok::getTokenName(MacroNameTok.getKind())<< " has expanded here\n\t";
-  /// testing if the macro is defined in the same file
+  /// Testing if the macro is defined in the same file
   /// so that global macros can be skipped
   if(sm->isInMainFile(MI->getDefinitionLoc())) {
     PresumedLoc presumed = sm->getPresumedLoc(Range.getBegin());
@@ -55,28 +53,7 @@ void TrackMacro::MacroExpands(const Token &MacroNameTok, const MacroInfo* MI,
     if(MI->isFunctionLike()){
 /*      std::cout<<"The macro "
                <<MacroNameTok.getIdentifierInfo()->getNameStart()
-               <<" is function like\n";
-      unsigned num_args = Args->getNumArguments();
-      std::cout<<"Total Args:"<<num_args<<"\n";
-      for(unsigned i = 0; i< num_args/2; ++i){
-        const std::vector<Token> & vec_tok =
-          Args->getPreExpArgument(i, MI, pci->getPreprocessor());
-        //std::cout<<"tok size: "<<vec_tok.size()<<vec_tok[0].getIdentifierInfo()->getNameStart();
-
-        std::for_each(vec_tok.begin(),vec_tok.end(),
-                      [](Token t) {
-                      std::cout<<t.getIdentifierInfo()->getNameStart();
-                        });
-        std::cout<<"Arg Number:"<<i<<"\n";
-        const Token* tok = Args->getUnexpArgument(i);
-        while(!tok->is(tok::eof)){
-        if(tok)
-          std::cout<<tok->getName();
-          std::cout<<tok->getIdentifierInfo()->getLength();
-          ++tok;
-        }
-      std::cout<<"\n";
-      }*/
+               <<" is function like\n";      */
     }
   }
   /*
