@@ -66,7 +66,7 @@ private:
     /// \brief clang::TrackMacro is defined by me
     /// the delete operator should not be called on track_macro
     /// because it is added to a reference counted Preprocessor class
-    clang::TrackMacro* track_macro;
+    clang::TrackMacro *track_macro;
 
     std::string current_file;
 

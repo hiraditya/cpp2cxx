@@ -86,7 +86,16 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
     std::cout<<"\n\nSearch paths output from ASTConsumer:\n"<<search_paths;
 //    if(ci.hasSema())
 //      std::cout<<"Sema from start";
-    ci.createDiagnostics(0,nullptr);
+    ci.createDiagnostics(nullptr, true);
+    clang::CompilerInvocation *Invocation = new clang::CompilerInvocation;
+    //Invocation->getPreprocessorOpts().addRemappedFile(
+    //  "test.cc", MemoryBuffer::getMemBuffer(FileContents).release());
+    ci.setInvocation(Invocation);
+
+    // Configure TargetOptions.
+    TargetOptions &to = ci.getInvocation().getTargetOpts();
+    to.Triple = llvm::sys::getDefaultTargetTriple();
+
     /// set the language to c++98
     ci.getInvocation().setLangDefaults(ci.getLangOpts(), clang::InputKind::IK_CXX,
                                        clang::LangStandard::lang_cxx11);
@@ -470,16 +479,15 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
     clang::InitializePreprocessor(PP, PPOpts, PCHHR, FEOpts);
 
     std::unique_ptr<ASTConsumer> Consumer (new MyASTConsumer);
-    //astConsumer = new MyASTConsumer();
+
     ci.setASTConsumer(std::move(Consumer));
 
     ci.createASTContext();
 
-/// pass the callback function
-
-    std::unique_ptr<clang::TrackMacro> track_macro(new clang::TrackMacro);
+    // Pass the callback function to PP and it will manage the memory.
+    track_macro = new clang::TrackMacro;
     track_macro->SetCompilerInstance(&ci);
-    PP.addPPCallbacks(std::move(track_macro));
+    PP.addPPCallbacks(std::unique_ptr<clang::PPCallbacks>(track_macro));
 
     return 0;
 }
