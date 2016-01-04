@@ -182,7 +182,7 @@ void Overseer::GenerateExternalASTHandler(const std::string& filename)
   ASTConsumer.DumpContent(filename);
 
   //ASTConsumer.PrintStats();
-  ASTConsumer.VerifyMacroScope();
+  ASTConsumer.VerifyMacroScope(true);
   ASTMacroStat = ASTConsumer.GetMacroStat();
   //inv_stat = ASTConsumer.GetInvocationStat();
 }

@@ -100,6 +100,12 @@
 #define DEBUG_MACRO_DEPENDENCY(ARG)
 #endif
 
+#ifdef  DEBUG_ASTCONSUMER_PRINT
+#define DEBUG_ASTCONSUMER(ARG) DEBUG(ARG)
+#else
+#define DEBUG_ASTCONSUMER(ARG)
+#endif
+
 #include<iostream>
 #include<algorithm>
 

@@ -34,7 +34,7 @@ int l = FXY((i+i),super(10),100);
 
 int main()
 {
-   int a1 = A;
+  int a1 = A;
   std::cout<<"\na1 = "<<a1;
   
 

@@ -27,27 +27,7 @@ std::ostream& operator<<(std::ostream& os,const ParsedDeclInfo& inf)
   return os;
 }
 
-
-/*
-  /// unit test
-int main(int argc, char** argv)
-{
-  if(argc<2){
-    std::cerr<<"Usage: <file_name>";
-    return -1;
-  }
-  CompilerInstance *pci = new CompilerInstance;
-  MyASTConsumer astConsumer;
-  astConsumer.Initialize(*pci);
-  astConsumer.DumpContent(argv[1]);
-  astConsumer.PrintStats();
-  astConsumer.VerifyMacroScope();
-  //delete pci;
-  return 0;
-}
-*/
-
-static void set_package_specific_options(PreprocessorOptions& PPOpts)
+static void set_package_specific_options(clang::PreprocessorOptions& PPOpts)
 {
     (void)PPOpts;
     ///PPOpts.UsePredefines = false;
@@ -64,7 +44,7 @@ static void set_package_specific_options(PreprocessorOptions& PPOpts)
     //////////////////////////////////////////
 }
 
-static void set_package_specific_paths(HeaderSearchOptions& HSOpts)
+static void set_package_specific_paths(clang::HeaderSearchOptions& HSOpts)
 {
   (void)HSOpts;
   /// clang specific include
@@ -389,29 +369,16 @@ bool MyASTConsumer::HandleTopLevelDecl(clang::DeclGroupRef d)
 {
   int count = 0;
   using namespace clang;
-  //CompilerInstance& ci = *pci;
   DeclGroupRef::iterator it;
   for( it = d.begin(); it != d.end(); it++)
   {
     count++;
-    //VarDecl *vd = llvm::dyn_cast<clang::VarDecl>(*it);
+
     FunctionDecl *fd = llvm::dyn_cast<clang::FunctionDecl>(*it);
     /// can be extended for class declaration
     if(fd){
       PrintSourceLocation(fd);
     }
-/*    if(!vd)
-    {
-      std::cerr << "Not a variable decl: "<<vd<<"\n";
-      continue;
-    }
-    std::cout << vd << std::endl;
-    if( vd->isFileVarDecl() && vd->hasExternalStorage() )
-    {
-      std::cerr << "Read top-level variable decl: '";
-      std::cerr << vd->getDeclName().getAsString();
-      std::cerr << std::endl;
-    }*/
   }
 return true;
 }
@@ -423,7 +390,8 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
                                 std::vector<std::string> const& search_paths)
 {
     pci = &ci;
-    std::cout<<"\n\nSearch paths output from ASTConsumer:\n"<<search_paths;
+    DEBUG_ASTCONSUMER(dbgs() << "\n\nSearch paths output from ASTConsumer:\n"
+                             << search_paths;);
     ci.createDiagnostics(nullptr, true);
     clang::CompilerInvocation *Invocation = new clang::CompilerInvocation;
     ci.setInvocation(Invocation);
@@ -435,18 +403,18 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
     to->Triple = llvm::sys::getDefaultTargetTriple();
 
     /// set the language to c++98
-    ci.getInvocation().setLangDefaults(ci.getLangOpts(), clang::InputKind::IK_CXX,
+    ci.getInvocation().setLangDefaults(ci.getLangOpts(),
+                                       clang::InputKind::IK_CXX,
                                        clang::LangStandard::lang_cxx11);
 
-    DEBUG(if(ci.getInvocation().getLangOpts()->CPlusPlus)
-          dbgs() << "c++ is defined now";);
+    DEBUG_ASTCONSUMER(if(ci.getInvocation().getLangOpts()->CPlusPlus)
+                        dbgs() << "c++ is defined now";);
 
     TargetInfo *pti = TargetInfo::CreateTargetInfo(ci.getDiagnostics(),
                                                    to);
                                                    //ci.getInvocation().TargetOpts);
 
     ci.setTarget(pti);
-
     ci.createFileManager();
     ci.createSourceManager(ci.getFileManager());
     ci.createPreprocessor(clang::TranslationUnitKind::TU_Complete);
@@ -486,11 +454,11 @@ int MyASTConsumer::InitializeCI(CompilerInstance& ci,
 
     const FrontendOptions& FEOpts = ci.getFrontendOpts();
     const auto &PCHHR = ci.getPCHContainerReader();
+    ApplyHeaderSearchOptions(PP.getHeaderSearchInfo(), HSOpts,
+                             PP.getLangOpts(), PP.getTargetInfo().getTriple());
 
     PP.getBuiltinInfo().InitializeBuiltins(PP.getIdentifierTable(),
                                            PP.getLangOpts());
-    ApplyHeaderSearchOptions(PP.getHeaderSearchInfo(), HSOpts,
-                             PP.getLangOpts(), PP.getTargetInfo().getTriple());
 
     clang::InitializePreprocessor(PP, PPOpts, PCHHR, FEOpts);
 
@@ -516,9 +484,12 @@ void MyASTConsumer::DumpContent(std::string const& file_name)
   // emit/ignore compiler warnings.
   clang::SrcMgr::CharacteristicKind Kind = clang::SrcMgr::C_User;
 
-  //std::cout<<"Current file name in AST comsumer is: "<<current_file;
+  DEBUG_ASTCONSUMER(dbgs() << "Current file name in AST comsumer is: "
+                           << current_file;);
   const FileEntry *pFile = ci.getFileManager().getFile(file_name.c_str());
-  ci.getSourceManager().createFileID(pFile, SourceLocation(), Kind);
+  SourceManager &SourceMgr = ci.getSourceManager();
+  SourceMgr.setMainFileID(SourceMgr.createFileID(pFile, SourceLocation(), Kind));
+
   // set file and loc parameters for the track_macro callback
   // placing here is important. It should be after the source manager
   // has created fileid for the file to be processed.
@@ -571,10 +542,12 @@ void MyASTConsumer::PrintStats()
   track_macro->PrintStats();
 }
 
-void MyASTConsumer::VerifyMacroScope()
+void MyASTConsumer::VerifyMacroScope(bool use_fast)
 {
-  //track_macro->VerifyMacroScope(FunctionInfo);
-  track_macro->VerifyMacroScopeFast(FunctionInfo);
+  if (use_fast)
+    track_macro->VerifyMacroScopeFast(FunctionInfo);
+  else // This was the initial implementation which is compute intensive.
+    track_macro->VerifyMacroScope(FunctionInfo);
 }
 
 /// relying on move semantics. returning by value

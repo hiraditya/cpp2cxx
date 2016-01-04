@@ -56,7 +56,7 @@ public:
     void PrintSourceLocation(clang::FunctionDecl* fd);
     void PrintSourceLocation(clang::SourceManager& sm, clang::SourceLocation loc);
     void PrintStats();
-    void VerifyMacroScope();
+    void VerifyMacroScope(bool use_fast);
     ASTMacroStat_t GetMacroStat();
     InvocationStat_t* GetInvocationStat(){ return track_macro->GetInvocationStat(); }
 private:

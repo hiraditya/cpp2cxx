@@ -102,7 +102,7 @@ auto MSB(_T1 x) -> decltype((((x) >> 24) & 0xffU)  /* most  significant byte */)
 
 int main()
 {
-   int a1 = A;
+  int a1 = A;
   std::cout<<"\na1 = "<<a1;
   
 
