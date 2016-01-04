@@ -33,14 +33,14 @@ ReplacementList::ReplacementList()
 { }
 
 void ReplacementList::set_replacement_list(token_type tok)
-{ 
+{
   rl_tokens.push_back(tok);
-//    std::cout<<"ReplacementList: "<<(*it).get_value()<<std::endl; 
+//    std::cout<<"ReplacementList: "<<(*it).get_value()<<std::endl;
 }
 
 void ReplacementList::set_replacement_list_str(std::string const& str,
                                                 vpTokInt argId)
-{ 
+{
   rl_str = str;
   if(!argId.empty()) {
     std::for_each(argId.begin(),argId.end(),
@@ -65,9 +65,9 @@ void ReplacementList::set_replacement_list_dependency_category(bool c)
 //the rl_tokens will not have any comments, just the pure ReplacementList
 std::string
 ReplacementList::get_replacement_list_str() const
-{ 
+{
   std::stringstream strm;
-  //since the last token is a new line so ignoring the last token 
+  //since the last token is a new line so ignoring the last token
   //by taking rl_tokens.back() instead of rl_tokens.end()
   std::for_each(rl_tokens.begin(),rl_tokens.end()-1,[&strm](token_type tok) {
     strm<<tok.get_value();
@@ -75,33 +75,33 @@ ReplacementList::get_replacement_list_str() const
   return strm.str();
 }
 
-std::string const& 
+std::string const&
 ReplacementList::get_formatted_replacement_list_str() const
 {
   return rl_str_formatted;
 }
 //the replacement_list_str contains all the tokens including the comments
-std::string const& 
+std::string const&
 ReplacementList::get_replacement_list_str_with_comments() const
-{ 
-  return rl_str; 
+{
+  return rl_str;
 }
 
-std::vector<token_type> const& 
+std::vector<token_type> const&
 ReplacementList::get_replacement_list_tokens() const
-{ 
+{
   return rl_tokens;
 }
 
 RlDCat
 ReplacementList::get_replacement_list_dependency_category() const
-{ 
+{
   return rl_dcat;
 }
 
 RlCCat
 ReplacementList::get_replacement_list_closure_category() const
-{ 
+{
   return rl_ccat;
 }
 
@@ -127,5 +127,5 @@ ReplacementList::get_replacement_list_idlist() const
     [&id_list](token_type tok) {
       id_list.push_back(tok);
     });
-  return id_list; 
+  return id_list;
 }

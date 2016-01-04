@@ -63,7 +63,7 @@ class RlParser {
     RlParser(DemacroficationScheme const& demacrofication_scheme,
                      std::ostream& log_file);
     void Parse(ReplacementList& rl);
-    void Parser(std::vector<token_type>::iterator beg, 
+    void Parser(std::vector<token_type>::iterator beg,
              std::vector<token_type>::iterator term);
 
     bool Match(boost::wave::token_id id);

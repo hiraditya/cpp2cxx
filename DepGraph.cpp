@@ -30,7 +30,7 @@ limitations under the License.
 
 Node* MacTree::GetParent(Node* const np)
 {
-  return np->parent;  
+  return np->parent;
 }
 
 Vertex_t MacTree::GetParent(Vertex_t const v)
@@ -81,7 +81,7 @@ bool MacTree::IsRoot(Vertex_t const vd) const
 //sibling of the currently pointed vertex
 bool MacTree::MakeSibling(Node& rn)
 {
-  DEBUG_TREE(dbgs()<<"\nMaking sibling: "<<rn.key.get_value()<<"\t"<<rn.key.get_position().get_line()<<"\n";);  
+  DEBUG_TREE(dbgs()<<"\nMaking sibling: "<<rn.key.get_value()<<"\t"<<rn.key.get_position().get_line()<<"\n";);
   Vertex_t v_dummy;//faking
   Node* pn = new Node;
   *pn = rn;
@@ -92,14 +92,14 @@ bool MacTree::MakeSibling(Node& rn)
   pn->parent = depGraph[u];
   pn->nodeIndex = ++nodeIndex;
   NodeMap_t::iterator nodeMap_iter;
-  //map::insert() returns pair<iterator,bool> 
+  //map::insert() returns pair<iterator,bool>
   nodeMap_iter = nodeMap.insert(std::make_pair(pn,v_dummy)).first;
   //add the pointer to node to the multimap
   //and capturing the returned vertex descriptor
   Vertex_t v = boost::add_vertex(nodeMap_iter->first, depGraph);
   nodeMap_iter-> second = v;//now assigning the vertex descriptor
-  //return if the edge was created or it was already there  
-  //add edge returns a pair <edge_descriptor,bool>  
+  //return if the edge was created or it was already there
+  //add edge returns a pair <edge_descriptor,bool>
   //Vertex_t u = GetParent(currVertex);
   bool new_edge =  boost::add_edge(u,v,depGraph).second;
   currVertex = nodeMap_iter-> second;
@@ -107,13 +107,13 @@ bool MacTree::MakeSibling(Node& rn)
   DEBUG_TREE(dbgs()<<"Node Number: "<<depGraph[v]->nodeIndex<<"\n";
              dbgs()<<"n_ptr: allocated: "<<pn
                    <<"\tinserted: "<<nodeMap_iter->first<<"\n";);
-  return new_edge;  
+  return new_edge;
 }
 
 //child to the currently pointed vertex
 bool MacTree::MakeChild(Node& rn)
 {
-  DEBUG_TREE(dbgs()<<"\nMaking child: "<<rn.key.get_value()<<"\t"<<rn.key.get_position().get_line()<<"\n";);    
+  DEBUG_TREE(dbgs()<<"\nMaking child: "<<rn.key.get_value()<<"\t"<<rn.key.get_position().get_line()<<"\n";);
   Vertex_t v_dummy;//faking
   Node* pn = new Node;
   *pn = rn;
@@ -130,14 +130,14 @@ bool MacTree::MakeChild(Node& rn)
   currVertex = nodeMap_iter-> second;
   DEBUG_TREE(dbgs()<<"Node Number: "<<depGraph[v]->nodeIndex<<"\n";
              dbgs()<<"n_ptr: allocated: "<<pn
-                   <<"\tinserted: "<<nodeMap_iter->first<<"\n";);  
+                   <<"\tinserted: "<<nodeMap_iter->first<<"\n";);
   return new_edge;
 }
 
 bool MacTree::MakeChild(Vertex_t parentV, Vertex_t childV)
 {
   currVertex = childV;
-  DEBUG_TREE(dbgs()<<"\nMaking child\n";);  
+  DEBUG_TREE(dbgs()<<"\nMaking child\n";);
   //return if the edge was created or it was already there
   return boost::add_edge(parentV,childV,depGraph).second;
 }
@@ -147,7 +147,7 @@ bool MacTree::MakeSibling(Vertex_t firstV,Vertex_t secondV)
   currVertex = secondV;
   DEBUG_TREE(dbgs()<<"Making sibling\n";);
   //return if the edge was created or it was already there
-  Vertex_t v = GetParent(firstV);  
+  Vertex_t v = GetParent(firstV);
   return boost::add_edge(v,secondV,depGraph).second;
 }
 
@@ -177,7 +177,7 @@ DepList_t const& MacTree::BuildMacroDependencyList()
     m_ptr = *mp_iter;
     //every loop should have a new instance to do away with emptying
     std::vector<PPMacro*> vec_mp;
-    DEBUG_TREE(dbgs()<<"Processing Macro: "<<m_ptr->get_identifier_str()<<"\n";);  
+    DEBUG_TREE(dbgs()<<"Processing Macro: "<<m_ptr->get_identifier_str()<<"\n";);
 
     id_list = m_ptr->get_replacement_list_dep_idlist();
     id_list_iter = id_list.begin();
@@ -212,7 +212,7 @@ void MacTree::GotoParent()
 
 void MacTree::DeleteNodes()
 {
-  //for each out_edges call the delete  
+  //for each out_edges call the delete
   std::pair<VertexIterator_t, VertexIterator_t> vp;
   //vertices(g) returns the pair of vertex iterators
   //the first one points to the first vertex
@@ -234,7 +234,7 @@ bool MacTree::DeleteVertex(Vertex_t v)
   //will delete the node during destruction via nodeMap
   boost::clear_vertex(v,depGraph);
   boost::remove_vertex(v,depGraph);
-return true;  
+return true;
 }
 
 PairMacroIter_t MacTree::GetMacro(token_type const& tok)
@@ -248,15 +248,15 @@ bool MacTree::IsMacro(token_type const& tok)
   //if there is atleast a macro with the token_type tok as identifier
   if(m_iter.first != m_iter.second)
     return true;
-  else 
+  else
     return false;
-}  
+}
 
 //checks the token to get the use case of macro
 void MacTree::CheckToken(token_iterator tok_iter)
 {
   PairMacroIter_t pm_iter = GetMacro(*tok_iter);
-  
+
   //if there is no macro corresponding to this token
 
   if(pm_iter.first == pm_iter.second) {
@@ -286,7 +286,7 @@ void MacTree::Dfs(Vertex_t const startV)
 
 void MacTree::Bfs(Vertex_t const startV)
 {
-  
+
 }
 
 void MacTree::TopSort(std::vector<Graph_t::vertex_descriptor>& topo_order)

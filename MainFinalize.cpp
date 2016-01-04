@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 
   try {
 
-    //the default file where the errors and warnings will be put to    
+    //the default file where the errors and warnings will be put to
     std::ostream* err_outstream = &std::cerr;
     std::ofstream plog_file;
     //the default file where the demacrofied macros will be listed
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
     po::options_description config_file_options("Allowed options");
     config_file_options.add_options()
       ("help,h", "produce help message")
-      ("verbose,v", po::value<int>()->implicit_value(1), //not used 
+      ("verbose,v", po::value<int>()->implicit_value(1), //not used
             "enable verbosity (optionally specify level)")
       ("enable-warning", po::value<bool>(&enable_warning),"display warning message")
       ("no-translate", po::value<bool>(&no_translate),"only analyze the macros without translation")
@@ -192,7 +192,7 @@ int main(int argc, char* argv[])
 
     if(vm.count("help")) {
       std::cout << "usage: <Executable> [options]\natleast input file is a must.\n";
-      std::cout << "If no output file is specified then the output " 
+      std::cout << "If no output file is specified then the output "
                 << "will be redirected to the standard output\n";
       std::cout << config_file_options;
       return 0;
@@ -230,7 +230,7 @@ int main(int argc, char* argv[])
     {
       /*
       input_files = vm["input-file"].as<std::vector<std::string> >();
-      std::cout << "Input files are: " 
+      std::cout << "Input files are: "
                 << vm["input-file"].as<std::vector<std::string> >()<< "\n";
       */
      /// @todo check if prefixing the output directory path to the output
@@ -241,7 +241,7 @@ int main(int argc, char* argv[])
                       });
       std::cout<<"input files are:\n"<<input_files<<"\n";
     }
-    else 
+    else
     {
       std::cerr << "error: no input file specified. exiting...\n";
       std::cerr << config_file_options;
@@ -263,7 +263,7 @@ int main(int argc, char* argv[])
             output_directory = cleanup_directory;
 
         /// @todo check if prefixing the output directory path to the output
-        /// file name is useful or not          
+        /// file name is useful or not
         std::for_each(output_files.begin(),output_files.end(),
                       [output_directory](std::string& output_file) {
                         output_file =  output_directory +"/"+ output_file;
@@ -273,7 +273,7 @@ int main(int argc, char* argv[])
       //          << vm["output-file"].as<std::vector<std::string> >() << "\n";
       std::cout<<"output files are:\n"<<output_files<<"\n";
     }
-    else 
+    else
     {
       std::cout<<"warning: no output filename specified.";
       std::cout<<"output shall be redirected to the standard output\n";
@@ -331,7 +331,7 @@ int main(int argc, char* argv[])
       // if reading of validator_file is successful
       std::cout <<"the validator-file is: "<<validator_file<<"\n";
     }
-    
+
     if(vm.count("global-macros-raw"))
     {
       //global_macros_raw = vm["global-macros-raw"].as<std::string>();
@@ -343,7 +343,7 @@ int main(int argc, char* argv[])
                 << "when no new global macros are added.\n";
     }
 
-#ifdef BUILD_NEW_MACRO_LIST    
+#ifdef BUILD_NEW_MACRO_LIST
     else
     {
       std::cerr<<"when BUILD_NEW_MACRO_LIST is defined,"
@@ -487,6 +487,6 @@ int main(int argc, char* argv[])
       std::cerr<<"std::exception: "<<e.what();
   } catch(...) {
       std::cerr<<"unknown error in the program\n";
-  }    
+  }
   return 0;
 }

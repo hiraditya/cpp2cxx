@@ -44,7 +44,7 @@
 #define _FORTIFY_SOURCE 2
 #define __SIZEOF_INT__ 4
 #define __SIZEOF_POINTER__ 8
-#define __USER_LABEL_PREFIX__ 
+#define __USER_LABEL_PREFIX__
 #define __STDC_HOSTED__ 1
 #define __LDBL_HAS_INFINITY__ 1
 #define __FLT_EPSILON__ 1.19209289550781250000e-7F
@@ -86,7 +86,7 @@
 #define __LP64__ 1
 #define __DECIMAL_BID_FORMAT__ 1
 #define __DEC128_MIN__ 1E-6143DL
-#define __REGISTER_PREFIX__ 
+#define __REGISTER_PREFIX__
 #define __UINT16_MAX__ 65535
 #define __DBL_HAS_DENORM__ 1
 #define __UINT8_TYPE__ unsigned char

@@ -40,9 +40,9 @@ PPMacro::~PPMacro()
 { /*delete m_stat;*/ }
 
 void PPMacro::set_identifier(token_type const& tok)
-{ 
+{
   identifier = tok;
-//    std::cout<<"identifier: "<<(*it).get_value()<<std::endl; 
+//    std::cout<<"identifier: "<<(*it).get_value()<<std::endl;
 }
 
 void PPMacro::put_tokens(std::vector<token_type> const& vec_tokens)
@@ -60,27 +60,27 @@ void PPMacro::put_tokens(std::vector<token_type> const& vec_tokens)
 
 void PPMacro::set_identifier_parameters(token_type const& tok,
                                         unsigned int parameter_count)
-{ 
-  //token mytoken(it);    
-  //std::cout<<"identifier_parameter iD: "<<tok.get_name()<<std::endl; 
-  identifier_parameters.push_back(std::make_pair(tok,parameter_count));     
+{
+  //token mytoken(it);
+  //std::cout<<"identifier_parameter iD: "<<tok.get_name()<<std::endl;
+  identifier_parameters.push_back(std::make_pair(tok,parameter_count));
 }
 
 void PPMacro::set_identifier_str(std::string str)
-{ 
-  identifier_str = str; 
+{
+  identifier_str = str;
 //    std::cout<<"iden_string: "<<identifier_str<<std::endl;
 }
 
 void PPMacro::set_replacement_list(token_type tok)
-{ 
+{
   rep_list.set_replacement_list(tok);
-  //ReplacementList.push_back(*it); 
-//    std::cout<<"ReplacementList: "<<(*it).get_value()<<std::endl; 
+  //ReplacementList.push_back(*it);
+//    std::cout<<"ReplacementList: "<<(*it).get_value()<<std::endl;
 }
 
 void PPMacro::set_replacement_list_str(std::string str, RlParser & rl_parser)
-{ 
+{
   rep_list.set_replacement_list_str(str, identifier_parameters);
 //    std::cout<<"repl_string: "<<replacement_list_str<<std::endl;
   logFile<<"  - log: parsing replacement list: '"
@@ -91,9 +91,9 @@ void PPMacro::set_replacement_list_str(std::string str, RlParser & rl_parser)
 
 
 void PPMacro::set_operation(PPOperation op)
-{ 
+{
   operation = op;
-//    std::cout<<"operations: "<<(*it).get_value()<<std::endl; 
+//    std::cout<<"operations: "<<(*it).get_value()<<std::endl;
 }
 
 
@@ -174,7 +174,7 @@ void PPMacro::AnalyzeIdentifier() const
     logFile<<warning_msg;
     throw ExceptionHandler(warning_msg);
   }
-/*  
+/*
   else
     throw ExceptionHandler(warning_msg + "No Problems!\n");
   */
@@ -229,7 +229,7 @@ std::string const& PPMacro::get_replacement_list_str_with_comments() const
 { return rep_list.get_replacement_list_str_with_comments(); }
 
 
-std::vector<std::pair<token_type,unsigned int> > const& 
+std::vector<std::pair<token_type,unsigned int> > const&
 PPMacro::get_identifier_parameters() const
 { return identifier_parameters; }
 
@@ -270,7 +270,7 @@ PPMacro::get_replacement_list_idlist() const
 
 std::list<token_type>
 PPMacro::get_replacement_list_dep_idlist() const
-{ 
+{
   //will contain dependent identifiers in the ReplacementList
   //i.e. those which donot occur as function arguments
   std::list<token_type> dep_idlist;
@@ -280,7 +280,7 @@ PPMacro::get_replacement_list_dep_idlist() const
   if(m_cat == MacroCategory::object_like)
     return dep_idlist;
   //iterator over function_like PPMacro's arguments
-  std::vector<std::pair<token_type,unsigned int> >::const_iterator iter_args;  
+  std::vector<std::pair<token_type,unsigned int> >::const_iterator iter_args;
   //iterator for the ReplacementList tokens
   std::list<token_type>::iterator iter_rl_idlist = dep_idlist.begin();
   //remove all those identifiers which are in the function argument
@@ -320,14 +320,14 @@ MacroScopeCategory PPMacro::get_macro_scope_category() const
 bool PPMacro::IsEquivalent(std::pair<token_iterator, token_iterator> token_iter_range) const
 {
   return true;
-/*  
+/*
   typedef std::vector<token_type>::const_iterator tok_iter;
   token_iterator first = token_iter_range.first;
   token_iterator second = token_iter_range.second;
   tok_iter this_mac_tok_iter = macro_tokens.begin();
   tok_iter this_mac_tok_iter_end = macro_tokens.end();
-  
-  for( ;(this_mac_tok_iter!=this_mac_tok_iter_end) && (first != second); 
+
+  for( ;(this_mac_tok_iter!=this_mac_tok_iter_end) && (first != second);
       ++first,++this_mac_tok_iter) {
 #ifdef DEBUG_MACRO_CLASS
     std::cout << "Comparing: " << boost::wave::token_id(*first)
@@ -355,8 +355,8 @@ MacroStat const* PPMacro::get_macro_stat()
 }
 
 bool PPMacro::operator==(PPMacro const& mac) const
-{ //return this->identifier == mac.identifier; 
-  return (this->identifier_str.compare(mac.identifier_str) == 0);  
+{ //return this->identifier == mac.identifier;
+  return (this->identifier_str.compare(mac.identifier_str) == 0);
 }
 
 /*bool PPMacro::operator==(token_type const& tok) const
@@ -366,6 +366,6 @@ bool PPMacro::operator==(PPMacro const& mac) const
 
 
 bool PPMacro::operator<(PPMacro const& mac) const
-{ 
+{
   return (this->identifier_str.compare(mac.identifier_str) < 0);
 }

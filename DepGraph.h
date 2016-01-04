@@ -75,12 +75,12 @@ struct Node {
         });
     }
     std::vector<token_type> const& GetCondStmt()
-    { 
-      return condStmt;      
+    {
+      return condStmt;
     }
       //put the macro in the free store
     void PushBackMacro(PPMacro& mac)
-    { 
+    {
       PPMacro* m = new PPMacro(mac);
       //*m = mac;
       vecMacro.push_back(m);
@@ -109,7 +109,7 @@ struct Node {
  */
 struct NodeOrder {
   bool operator()(Node const* n1, Node const* n2 = NULL) const
-  { 
+  {
     if(n2==NULL)
       return true;
     return n1->nodeIndex < n2->nodeIndex;
@@ -155,14 +155,14 @@ public:
  * @brief The tree class having Node as vertices of the trees
  */
 class MacTree {
-  
+
   public:
     MacTree()
     :nodeIndex(0),depGraph(1)
     {
       Node* pn = new Node;
       //currVertex is dummy here
-      NodeMap_t::iterator nodeMap_iter = 
+      NodeMap_t::iterator nodeMap_iter =
                           nodeMap.insert(std::make_pair(pn,currVertex)).first;
       currVertex = boost::add_vertex(nodeMap_iter->first, depGraph);
       nodeMap_iter-> second = currVertex;
@@ -212,9 +212,9 @@ class MacTree {
                   GetSiblings(Vertex_t const currV);
 
     /// @brief returns the pair of iterators to the children
-    std::pair<OutEdgeIterator_t, OutEdgeIterator_t> 
+    std::pair<OutEdgeIterator_t, OutEdgeIterator_t>
                   GetChildren(Vertex_t const currV);
-    
+
     bool          MakeChild(Vertex_t parentV, Vertex_t childV);
     bool          MakeSibling(Vertex_t firstV,Vertex_t secondV);
     bool          DeleteVertex(Vertex_t v);
@@ -224,14 +224,14 @@ class MacTree {
 
     /// not defined: for future use
     Vertex_t      GetAncestor(int nesting_level);
-    
+
     /// algorithm
     void          Dfs(Vertex_t const startV);
     /// algorithm
     void          Bfs(Vertex_t const startV);
     /// algorithm
     void          TopSort(std::vector<Graph_t::vertex_descriptor>& topo_order);
-    
+
   private:
     int                     nodeIndex;
     NodeMap_t               nodeMap;

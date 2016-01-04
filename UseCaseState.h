@@ -29,19 +29,19 @@ limitations under the License.
 #include <sstream>
 
 /**
- * @class UseCaseState 
+ * @class UseCaseState
  * @details The class to keep track of the use case of macro in the code
  * The use case only corresponds to the macro usage in code and not in the
  * replacement list of the macro
- * @todo When the macro is nested within another macro during usage, if the 
- * number of tokens in the identifier list of macro is not the same as the 
+ * @todo When the macro is nested within another macro during usage, if the
+ * number of tokens in the identifier list of macro is not the same as the
  * tokens in use case then the string which records the use case
  * will not contain the complete identifier list
  */
 class UseCaseState {
   private:
       typedef std::vector<token_iterator> VecTokenIter_t;
-  public:  
+  public:
     UseCaseState()
       : numParens(0), done(true)
     {}

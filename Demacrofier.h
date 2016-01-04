@@ -68,14 +68,14 @@ class Demacrofier {
     void SetValidator(ValidMacros_t const* v_macros);
   private:
 
-/** 
+/**
  * #define FXY(X,Y,Z) ((X) + (Y))
- * template <class T1, class T2, class T3> 
+ * template <class T1, class T2, class T3>
  * auto FXY(T1 X, T2 Y, T3 Z) -> decltype(((X) + (Y)))
  * {
  *   return ((X) + (Y));
  * }
- */   
+ */
     std::string DemacrofyFunctionLike(PPMacro const* m_ptr) const;
     /**
      * #define FXY(X,Y,Z) ((X) + (Y))
@@ -107,7 +107,7 @@ class Demacrofier {
  * {
  *   FXY(X,Y,0);
  * }
- */ 
+ */
     std::string DemacrofyMultipleStatements(PPMacro const* m_ptr) const;
     std::string DemacrofyStatementType(PPMacro const* m_ptr) const;
     bool IsDemacrofiable(PPMacro const& mac) const;

@@ -107,7 +107,7 @@ class Parser {
     void ParseMacros(MacroList_t& macro_list);
     void ParseGlobalMacros();
     void ParseLocalMacros(std::string ifileStr, position_type pos);
-    
+
     bool PPCheckIdentifier(std::string const& id_value) const;
     bool PPCheckIdentifier(std::string const& id_value,
                            MacroList_t const& macro_list) const;
@@ -116,8 +116,8 @@ class Parser {
     void PPAnalyzeMacroDependency(std::ostream& os);
     // when multiple occurences of same macros are allowed multiple_definitions=true
     void Demacrofy(std::ostream& stat, bool multiple_definitions=false);
-    
-  private:  
+
+  private:
     void            InitializeMacTree();
     void            PPDefineHandler(MacroList_t& macro_list,PPMacro& macro_ref);
     std::string     PPUndefHandler(MacroList_t& macro_list, PPMacro& macro_ref);
@@ -145,7 +145,7 @@ class Parser {
     InvocationStat_t* pInvocationStat;
 
     /**
-     * Variables initialized in the body of the constructor        
+     * Variables initialized in the body of the constructor
      *     @var CondParser* cp;
      *     @var Demacrofier* demac;
      *     @var token_iterator it;//current token
@@ -174,26 +174,26 @@ class Parser {
      *     @var CondCategory condCat;
      *     @var std::string fileGlobalMacros;
      */
-    
+
     /**
      * @var int nesting_level
-     * @details nesting level is 0 for the predefined macros and 
+     * @details nesting level is 0 for the predefined macros and
      * increases by 1 with each #if style block
      */
     int           nesting_level;
-   /** 
+   /**
      * @var std::string fileGlobalMacros;
      * @details useful for passing around the conditional category(config/local)
-     */    
+     */
     CondCategory  condCat;
-    
-    /** 
+
+    /**
      * @var std::string fileGlobalMacros;
      * @details file containing global macros
      */
     std::string   fileGlobalMacros;
-    
-    /** 
+
+    /**
      * Other Variables:
      * @var std::vector<token_type> condStmt;
      * @var MacroList_t localMacros;

@@ -127,8 +127,8 @@ void Parser::Parse(std::string file_name)
  //because while assigning the condCat the gMacros is checked
 void Parser::ReadGlobalMacros(std::string const& global_macro_file_name)
 {
-  //first parse the global macros and put into a file which can be used by 
-  //conditional parser for looking up the list of global macros  
+  //first parse the global macros and put into a file which can be used by
+  //conditional parser for looking up the list of global macros
   try {
     globalMacros.clear();
     const unsigned int line_width = 2048;
@@ -160,7 +160,7 @@ void Parser::ReadGlobalMacros(std::string const& global_macro_file_name)
     logFile << "  - error: "<<e.GetMessage()<<"\n";
     throw;
   }
-  //should be after parsing the global macros  
+  //should be after parsing the global macros
   //passing the file containing global macros so that it can make a list
   //which is useful in determining if a conditional macro uses global macros
   //cp = new CondParser(fileGlobalMacros);
@@ -177,7 +177,7 @@ void Parser::ParseNewGlobalMacros(std::string const& raw_global_macro_file_name)
   std::ifstream gmstream(raw_global_macro_file_name);
   if(!gmstream.is_open()) {
     throw ExceptionHandler("file: " + raw_global_macro_file_name + " couldn't be opened\n");
-  }  
+  }
   gmstream.unsetf(std::ios::skipws);
   instr = std::string(std::istreambuf_iterator<char>(gmstream.rdbuf()),
       std::istreambuf_iterator<char>());
@@ -191,7 +191,7 @@ void Parser::ParseNewGlobalMacros(std::string const& raw_global_macro_file_name)
         boost::wave::support_cpp|boost::wave::support_option_long_long));
   it_begin = it;
   it_end = token_iterator();
-  //first parse the global macros and put into a file which can be used by 
+  //first parse the global macros and put into a file which can be used by
   //conditional parser for looking up the list of global macros
   try {
     //writing into fileGlobalMacros
@@ -256,7 +256,7 @@ void Parser::ParseMacros(MacroList_t& macro_list)
         break;
       case boost::wave::T_PP_IFNDEF:
         ++nesting_level;
-        tempNode.key = *it; 
+        tempNode.key = *it;
         PPIfHandler(tempNode, PPNOTDEFINED);
         pTree->MakeChild(tempNode);
         break;
@@ -270,7 +270,7 @@ void Parser::ParseMacros(MacroList_t& macro_list)
         //since there is no condition only the #else will goto condStmt
         condStmt.push_back(*it);
         tempNode.condStmt = condStmt;
-        tempNode.condCat = condCat;//same as of immediate IF block        
+        tempNode.condCat = condCat;//same as of immediate IF block
         pTree->MakeSibling(tempNode);
         break;
       case boost::wave::T_PP_ENDIF:
@@ -320,7 +320,7 @@ bool Parser::PPCheckIdentifier(std::string const& id_value) const
   if(localMacros.find(id_value)!=localMacros.end() ||
       globalMacros.find(id_value)!=localMacros.end())
     return true;
-  else 
+  else
     return false;
 }
 
@@ -368,7 +368,7 @@ void Parser::PPDefineHandler(MacroList_t& macro_list, PPMacro& macro_ref)
     unsigned int left_paren_count = 1;
     unsigned int parameter_count = 0;
     unsigned int comma_count = 0;
-    //handle function like PPMacro    
+    //handle function like PPMacro
     while(left_paren_count) {
       //logFile<<"  - log: \nfound token: "<<id_value.str();
       // causes memory leaks
@@ -377,15 +377,15 @@ void Parser::PPDefineHandler(MacroList_t& macro_list, PPMacro& macro_ref)
       macro_tokens.push_back(*it);
       id_value << it->get_value();
       switch(id) {
-        case boost::wave::T_NEWLINE:  
-        case boost::wave::T_SPACE:  
-        // cout<<"\nfound white_space\n"; 
+        case boost::wave::T_NEWLINE:
+        case boost::wave::T_SPACE:
+        // cout<<"\nfound white_space\n";
           break;
         case boost::wave::T_LEFTPAREN:
-        // cout<<"\nfound left paren\n"; 
+        // cout<<"\nfound left paren\n";
           left_paren_count++;
           break;
-        case boost::wave::T_RIGHTPAREN: 
+        case boost::wave::T_RIGHTPAREN:
           //logFile<<"  - log: \nfound right paren\n";
           left_paren_count--;
           if(parameter_count == comma_count && parameter_count != 0) {
@@ -407,11 +407,11 @@ void Parser::PPDefineHandler(MacroList_t& macro_list, PPMacro& macro_ref)
           macro_ref.set_identifier_parameters(*it,parameter_count);
           break;
         /// make the MacroCategory as struct with member variables
-        /// or think of other scheme because the membership is not 
+        /// or think of other scheme because the membership is not
         /// exclusive to one
         case boost::wave::T_ELLIPSIS:
           m_cat = MacroCategory::variadic;
-          break;      
+          break;
         default:
           /// to bail out of unforseen situations e.g. when the token is a keyword
           /// it emits an error
@@ -440,10 +440,10 @@ void Parser::PPDefineHandler(MacroList_t& macro_list, PPMacro& macro_ref)
   }
   id = boost::wave::token_id(*it);
   std::stringstream rep_list_str;
-  
-  //handle for replacement list with more than one tokens/parameters  
+
+  //handle for replacement list with more than one tokens/parameters
   while(id != boost::wave::T_NEWLINE) {
-      
+
     //when c comment or cpp commnet stop putting the tokens into
     //replacement text and put a newline at the end of the replacement text
     if(id == boost::wave::T_CONTLINE) {
@@ -452,10 +452,10 @@ void Parser::PPDefineHandler(MacroList_t& macro_list, PPMacro& macro_ref)
     }
     else rep_list_str<<it->get_value();
     macro_ref.set_replacement_list(*it);
-    
+
     if(id == boost::wave::T_CPPCOMMENT) {
       //making a new token to insert into the replacement text
-      //because boost::T_CPPCOMMENT = // ... \n 
+      //because boost::T_CPPCOMMENT = // ... \n
       //token_type token_newline(boost::wave::T_NEWLINE, "\n", it->get_position());
       //macro_ref.set_replacement_list(token_newline);
       break;
@@ -468,7 +468,7 @@ void Parser::PPDefineHandler(MacroList_t& macro_list, PPMacro& macro_ref)
       rep_list_str<<it->get_value();
       if(id != boost::wave::T_SPACE)
         macro_ref.set_replacement_list(*it);
-/// @todo contline is not detected       
+/// @todo contline is not detected
 //       if(id == boost::wave::T_CONTLINE)
 //         logFile<<"found a contline\n";
     }
@@ -519,7 +519,7 @@ void Parser::PPDefineHandler(MacroList_t& macro_list, PPMacro& macro_ref)
 
 /**
  * @todo not inserting the identifier into the macro_list as of now.
- * look into the macro_list if the macro is predefined or local, 
+ * look into the macro_list if the macro is predefined or local,
  * or if the macro was even present or not.
  */
 std::string Parser::PPUndefHandler(MacroList_t& macro_list, PPMacro& macro_ref)
@@ -604,7 +604,7 @@ void Parser::PPAnalyzeMacroDependency(std::ostream& os)
 }
 
 void Parser::PPBuildMacroDependencyList(std::ostream& os)
-{  
+{
   std::vector<PPMacro*> v;
 
 //vector of pairs to retain the order in which they occur
@@ -738,7 +738,7 @@ token_iterator Parser::GoPastMacro(token_iterator it)
       if(id == boost::wave::T_CPPCOMMENT || id == boost::wave::T_CCOMMENT) {
         return it;//go back to point to the end of macro
       }
-      id = *(++it);      
+      id = *(++it);
   }
   return it;//go back to point to the end of macro
 }

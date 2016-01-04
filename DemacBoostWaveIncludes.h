@@ -30,7 +30,7 @@ typedef token_type::position_type position_type;
  */
 struct TokenOrder {
   bool operator()(const token_type t1, const token_type t2) const
-  { 
+  {
     return t1.get_value() < t2.get_value();
   }
 };

@@ -40,7 +40,7 @@ limitations under the License.
 #include<fstream>
 #include<iostream>
 
-//depending upon the demacrofication scheme the demacrofier should 
+//depending upon the demacrofication scheme the demacrofier should
 //return to the subject class which should call the FileManager for file handling
 /**
  * @class FileManagerScheme
@@ -63,10 +63,10 @@ class Overseer;
 /**
  * @class FileManager
  * @brief  will be responsible for maintaining all the files that are required
- * to be demacrofied and 
+ * to be demacrofied and
  */
 class FileManager {
-  
+
   public:
     /// @function FileManager(FileManagerScheme const& fs)
     /// @brief constructor takes the file scheme FileManagerScheme
@@ -85,14 +85,14 @@ class FileManager {
 
     //not useful as of now
     /*
-    FileManager(std::vector<std::string> const& input_files, 
-                std::vector<std::string> const& output_files, 
-                std::string const& input_directory, 
-                std::string const& output_directory, 
+    FileManager(std::vector<std::string> const& input_files,
+                std::vector<std::string> const& output_files,
+                std::string const& input_directory,
+                std::string const& output_directory,
                 std::string const& backup_directory);
     //not useful as of now
-    FileManager(std::vector<std::string> const& input_files, 
-                std::vector<std::string> const& output_files, 
+    FileManager(std::vector<std::string> const& input_files,
+                std::vector<std::string> const& output_files,
                 std::string const& backup_directory);
     //not useful as of now
     FileManager(std::vector<std::string> const& input_files);
@@ -102,7 +102,7 @@ class FileManager {
     std::vector<std::string>const&  InputFiles();
     std::string const&              OutputDirectory();
     std::string const&              InputDirectory();
-    
+
     //check whether this file is there in the list of output_files or not
     void          UpdateFile(std::string const& file_str);
     void          UpdateFile(std::ostream& fp, std::string const& file_str);

@@ -27,13 +27,13 @@ public:
 
   ExceptionHandler() : message("Unknown Exception")
   {}
-  
+
   ExceptionHandler(int i) : error_code(i)
   {}
-  
+
   ExceptionHandler(std::string msg) : message(msg)
   {}
-  
+
   ExceptionHandler(token_type const& tok, std::string msg)
   {
     std::stringstream err_msg;
@@ -45,7 +45,7 @@ public:
     message = err_msg.str();
   }
 
-/*  
+/*
   ExceptionHandler(const PPMacro* mac, std::string msg)
   {
     std::stringstream err_msg;
@@ -54,18 +54,18 @@ public:
             <<tok.get_position().get_line()<<":"
             <<tok.get_position().get_column()<<":";
     err_msg << msg;
-    message = err_msg.str();    
+    message = err_msg.str();
   }
-*/  
+*/
   inline const std::string& GetMessage() const
-  { 
+  {
     return message;
   }
-  inline int GetErrorCode() 
-  { 
-    return error_code;     
+  inline int GetErrorCode()
+  {
+    return error_code;
   }
-  
+
 private:
   std::string message;
   int error_code;

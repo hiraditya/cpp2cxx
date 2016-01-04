@@ -47,17 +47,17 @@ typedef std::map<std::string,   //identifier
         > MacroList_t;
 
 /**
- * @class CondParser 
+ * @class CondParser
  * To parse the tokens of the preprocessing conditional statements
  */
 class CondParser {
 
-  public:  
+  public:
     CondParser(std::string file_global_macros);
     void Parser(Node& tree_node, token_iterator t_it);
-    
+
     bool Match(boost::wave::token_id id);
-    
+
     void Assignment();
     void Expression();
     void Expression1();
@@ -68,7 +68,7 @@ class CondParser {
     void Expression6();
     void Expression7();
     void Expression8();
-    
+
     bool PPCheckIdentifier(std::string id_str);
     token_iterator GetTokenPosition();
   private:

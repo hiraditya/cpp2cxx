@@ -46,7 +46,7 @@ limitations under the License.
 class RlParser;
 
 /**
- * @class ReplacementList 
+ * @class ReplacementList
  * @brief class to keep all the details of replacement list of a macro
  * This class is a member variable of the PPMacro class
  */
@@ -71,7 +71,7 @@ class ReplacementList {
 
     RlCCat
     get_replacement_list_closure_category() const;
-    
+
     RlTokType const&
     get_replacement_list_token_type() const;
 
@@ -80,7 +80,7 @@ class ReplacementList {
 
     std::list<token_type>
     get_replacement_list_idlist() const;
- 
+
   private:
     /** friend class
      *  @class RlParser

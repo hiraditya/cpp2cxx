@@ -52,7 +52,7 @@ int main()
   if(!ofp.is_open())
     return -1;
   map<string,set<string> >::iterator dep_list_iter;
-  for_each(dep_list.begin(), dep_list.end(), 
+  for_each(dep_list.begin(), dep_list.end(),
       [&ofp](pair<string,set<string> > p){
         std::cout<<"\nPrinting "<<p.first<<" and "<<p.second;
         ofp<<p.first<<":\n"<<p.second<<"\n";

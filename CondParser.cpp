@@ -34,21 +34,21 @@ CondParser::CondParser(std::string file_global_macros)
   //putting line_width instead of 256 gives an error why??
   char fc[line_width],sc[line_width];
   std::ifstream gMacros(file_global_macros);
-  if(!gMacros.is_open()) 
+  if(!gMacros.is_open())
     return;
   gMacros.seekg(0,std::ios::beg);
 
   //to ignore the newline at the end of the file
   gMacros.getline(fc,line_width);
-  gMacros.getline(sc,line_width);  
+  gMacros.getline(sc,line_width);
   while(gMacros.good()) {
-    macroList.insert(std::make_pair(fc,sc));    
+    macroList.insert(std::make_pair(fc,sc));
     gMacros.getline(fc,line_width);
     gMacros.getline(sc,line_width);
   }
   gMacros.close();
 }
-    
+
 void CondParser::Parser(Node& tree_node, token_iterator t_it)
 {
   pNode = &tree_node;
@@ -90,7 +90,7 @@ bool CondParser::Match(boost::wave::token_id id)
     id_value<<(*it).get_value();
     //std::cout<<"\nNext_id: "<<id_value.str();
   }
-  else { 
+  else {
     //std::cout<<"\nNOMATCH::Expected: "<<id_value.str();
     //throw "Invalid expression";
     return false;
@@ -116,18 +116,18 @@ void CondParser::Assignment()
       break;
     case T_ASSIGN://=
     case T_ANDASSIGN://&=
-    case T_ANDASSIGN_ALT:// and_eq    
-    case T_DIVIDEASSIGN:// /=  
-    case T_MINUSASSIGN:// -=   
-    case T_STARASSIGN:// *=  
+    case T_ANDASSIGN_ALT:// and_eq
+    case T_DIVIDEASSIGN:// /=
+    case T_MINUSASSIGN:// -=
+    case T_STARASSIGN:// *=
     case T_PERCENTASSIGN:
-    case T_PLUSASSIGN:   
+    case T_PLUSASSIGN:
     case T_ORASSIGN:
-    case T_ORASSIGN_ALT:// or_eq        
-    case T_ORASSIGN_TRIGRAPH:     
+    case T_ORASSIGN_ALT:// or_eq
+    case T_ORASSIGN_TRIGRAPH:
     case T_XOR_TRIGRAPH:
     case T_XORASSIGN:
-    case T_XORASSIGN_ALT: 
+    case T_XORASSIGN_ALT:
     case T_XORASSIGN_TRIGRAPH:
     case T_SHIFTLEFTASSIGN: // <<=
     case T_SHIFTRIGHTASSIGN:// >>=
@@ -146,12 +146,12 @@ void CondParser::Expression()
   Expression1();
   std::stringstream id_value;
   token_id id = token_id(*it);
-  id_value << (*it).get_value();  
-  DEBUG_CONDITIONALS(dbgs()  << "\nin Expression: "<<id_value.str(););  
+  id_value << (*it).get_value();
+  DEBUG_CONDITIONALS(dbgs()  << "\nin Expression: "<<id_value.str(););
 
-  //although the comma has lower priority than the assignment but 
+  //although the comma has lower priority than the assignment but
   //it has been kept here to facilitate simple parsing
-  while(id == T_AND || id == T_XOR || id == T_OR || id == T_ANDAND || 
+  while(id == T_AND || id == T_XOR || id == T_OR || id == T_ANDAND ||
     id == T_OROR || id == T_OROR_ALT) {
     Match(id);
     Expression1();
@@ -168,8 +168,8 @@ void CondParser::Expression1()
   id_value << (*it).get_value();
   DEBUG_CONDITIONALS(dbgs() <<"\nin Expression1: "<<id_value.str(););
 
-  while(id == T_EQUAL || id == T_NOTEQUAL || id == T_NOTEQUAL_ALT || 
-      id == T_LESS || id == T_LESSEQUAL || id == T_GREATER || 
+  while(id == T_EQUAL || id == T_NOTEQUAL || id == T_NOTEQUAL_ALT ||
+      id == T_LESS || id == T_LESSEQUAL || id == T_GREATER ||
       id == T_GREATEREQUAL) {
     Match(id);
     Expression2();
@@ -215,7 +215,7 @@ void CondParser::Expression4()
   std::stringstream id_value;
   token_id id = token_id(*it);
   id_value << (*it).get_value();
-  DEBUG_CONDITIONALS(dbgs() <<"\nin Expression4: "<<id_value.str(););  
+  DEBUG_CONDITIONALS(dbgs() <<"\nin Expression4: "<<id_value.str(););
   while(id == T_STAR || id == T_DIVIDE || id == T_PERCENT) {
     Match(id);
     Expression5();
@@ -229,7 +229,7 @@ void CondParser::Expression5()
   Expression6();
   std::stringstream id_value;
   token_id id = token_id(*it);
-  DEBUG_CONDITIONALS(dbgs() <<"\nin Expression5: "<<id_value.str(););  
+  DEBUG_CONDITIONALS(dbgs() <<"\nin Expression5: "<<id_value.str(););
   while(id == T_DOTSTAR || id == T_ARROWSTAR) {
     Match(id);
     Expression6();
@@ -243,9 +243,9 @@ void CondParser::Expression6()
   Expression7();
   std::stringstream id_value;
   token_id id = token_id(*it);
-DEBUG_CONDITIONALS(        
-  dbgs() <<"\nin Expression6: "<<id_value.str();            
-);  
+DEBUG_CONDITIONALS(
+  dbgs() <<"\nin Expression6: "<<id_value.str();
+);
   while(id == T_STAR || id == T_DIVIDE || id == T_PERCENT) {
     Match(id);
     Expression7();
@@ -260,7 +260,7 @@ void CondParser::Expression7()
   std::stringstream id_value;
   token_id id = token_id(*it);
   id_value<<(*it).get_value();
-  DEBUG_CONDITIONALS(dbgs() <<"\nin Expression7: "<<id_value.str(););  
+  DEBUG_CONDITIONALS(dbgs() <<"\nin Expression7: "<<id_value.str(););
   while(id == T_MINUS ||id == T_PLUS || id == T_NOT || id == T_NOT_ALT ||
     id == T_COMPL || id == T_MINUSMINUS ||id == T_PLUSPLUS) {
     // new then new[] delete then delete []
@@ -294,7 +294,7 @@ void CondParser::Expression8()
           DEBUG_CONDITIONALS(dbgs() << "\tmatch left paren";);
           Match(T_LEFTPAREN);
           //std::cout<<"\ndefined with identifier within parens";
-          //capture the identifier(if any) for lookup          
+          //capture the identifier(if any) for lookup
           id_value << (*it).get_value();
           id = token_id(*it);
           Match(id);
@@ -302,7 +302,7 @@ void CondParser::Expression8()
         }
         else if(id == T_IDENTIFIER) {
           //capture the identifier(if any) for lookup
-          id_value << (*it).get_value();  
+          id_value << (*it).get_value();
           id = token_id(*it);
           Match(T_IDENTIFIER);
         }
@@ -326,10 +326,10 @@ void CondParser::Expression8()
       DEBUG_CONDITIONALS(dbgs() << "\nExpecting Num literal_type: "
                                 << id_value.str() << "\n";);
       Match(id);
-      break;      
+      break;
     case T_LONGINTLIT:
     case T_FLOATLIT:
-    case T_FIXEDPOINTLIT:  // IDL specific    
+    case T_FIXEDPOINTLIT:  // IDL specific
       Match(id);
       //to bypass <lit>e<+/-><lit><id>
       if(Match(T_IDENTIFIER)) {} // Empty
@@ -337,7 +337,7 @@ void CondParser::Expression8()
     case T_CHARLIT:
     case T_STRINGLIT:
       Match(id);
-      break;    
+      break;
     case T_LEFTPAREN:
       DEBUG_CONDITIONALS(dbgs() <<"\nMatch Left Paren";);
       Match(T_LEFTPAREN);
@@ -345,7 +345,7 @@ void CondParser::Expression8()
       DEBUG_CONDITIONALS(dbgs() << "\nMatch Right Paren";);
       Match(T_RIGHTPAREN);
       break;
-        
+
 //reject keyword_type
     case T_ASM:
     case T_AUTO:
@@ -364,7 +364,7 @@ void CondParser::Expression8()
     case T_DO:
     case T_DOUBLE:
     case T_ELSE:
-    case T_ENUM: 
+    case T_ENUM:
     case T_EXPLICIT:
     case T_EXPORT:
     case T_EXTERN:
@@ -372,7 +372,7 @@ void CondParser::Expression8()
     case T_FOR:
     case T_FRIEND:
     case T_GOTO:
-    case T_IF: 
+    case T_IF:
     case T_INLINE:
     case T_INT:
     case T_LONG:
@@ -387,10 +387,10 @@ void CondParser::Expression8()
     case T_SHORT:
     case T_SIGNED:
     //TODO left for now  to be looked into later
-    case T_NEW:    
-    case T_DELETE:      
-    case T_DYNAMICCAST:    
-    case T_REINTERPRETCAST:      
+    case T_NEW:
+    case T_DELETE:
+    case T_DYNAMICCAST:
+    case T_REINTERPRETCAST:
     case T_STATICCAST:
     case T_SIZEOF:
       // left paren then expr then right paren
@@ -435,18 +435,18 @@ void CondParser::Expression8()
       break;
 //     //array dereference
 //     case T_LEFTBRACKET:
-//     case T_LEFTBRACKET_ALT:       
+//     case T_LEFTBRACKET_ALT:
 //     case T_LEFTBRACKET_TRIGRAPH:
 //       Match(id);
 //       Expression();
 //       Match(T_RIGHTBRACKET);
     //case T_RIGHTBRACKET:
-    //case T_RIGHTBRACKET_ALT:    
+    //case T_RIGHTBRACKET_ALT:
     //case T_RIGHTBRACKET_TRIGRAPH:
 
     //function like only
     case T_LEFTBRACE:
-    case T_LEFTBRACE_ALT: 
+    case T_LEFTBRACE_ALT:
     case T_LEFTBRACE_TRIGRAPH:
       //look for multiple statements within the braces
       //assume that statements are correct within the block
@@ -459,13 +459,13 @@ void CondParser::Expression8()
     //case T_RIGHTBRACE_ALT:
     //case T_RIGHTBRACE_TRIGRAPH:
       //skip for now
-    case T_POUND_POUND:   
+    case T_POUND_POUND:
     case T_POUND_POUND_ALT:
     case T_POUND_POUND_TRIGRAPH:
     case T_POUND:
-    case T_POUND_ALT:     
+    case T_POUND_ALT:
     case T_POUND_TRIGRAPH:
-    case T_ELLIPSIS:      
+    case T_ELLIPSIS:
       Match(id);
       Match(T_IDENTIFIER);
       break;
@@ -474,9 +474,9 @@ void CondParser::Expression8()
     case T_ARROW:
     // :: has the highest priority
     case T_COLON_COLON:
-    case T_COLON:  
+    case T_COLON:
     case T_DOTSTAR:
-    case T_ARROWSTAR:      
+    case T_ARROWSTAR:
       Match(id);
       break;
     case T_QUESTION_MARK:
@@ -484,12 +484,12 @@ void CondParser::Expression8()
       Expression();
       Match(T_COLON);
       Expression();
-      break; 
+      break;
 
     //set rl_tcat::assignment_type;
-    //skips    
+    //skips
     case T_SPACE:
-    case T_SPACE2:   
+    case T_SPACE2:
     case T_NEWLINE:
     case T_GENERATEDNEWLINE:
     case T_EOF:
@@ -501,8 +501,8 @@ void CondParser::Expression8()
     case T_CPPCOMMENT:
       DEBUG_CONDITIONALS(dbgs() << "\ncomments: " << id_value.str() << "\n";);
       break;
-    //may be error   
-    case T_ANY:  
+    //may be error
+    case T_ANY:
     case T_ANY_TRIGRAPH:
     case T_UNKNOWN:
     case T_FIRST_TOKEN:
