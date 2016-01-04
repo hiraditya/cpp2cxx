@@ -15,7 +15,7 @@ int super(int i)
 
 #define INSIDE_FUN_SUPER(X,Y) X+100 + j
 
-  //variable 'j' referenced in macro INSIDE_FUN_SUPER 
+  //variable 'j' referenced in macro INSIDE_FUN_SUPER
   //the transformation has to be carefully placed after the declaration of 'int j'
   int j = 10;
 

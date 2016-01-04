@@ -169,7 +169,7 @@ std::string Demacrofier::DemacrofyFunctionLike(PPMacro const* m_ptr) const
                   << p_it->first.get_value();
         }
     }
-    template_arg << "> "; // '>' then space
+    template_arg << ">";
     demacrofied_line << template_arg.str();
   }
   demacrofied_line << "\nauto "  //auto then space

@@ -97,7 +97,7 @@ void RlParser::Parse(ReplacementList& rl)
   }*/
 }
 
-void RlParser::Parser(std::vector<token_type>::iterator beg, 
+void RlParser::Parser(std::vector<token_type>::iterator beg,
                    std::vector<token_type>::iterator term)
 {
   //boost::wave::token_id id;
@@ -119,7 +119,7 @@ DEBUG_RLPARSER(
   //do not change the order, first CPP comments should be checked
   //see the Match function for why...
 /*  if(Match(boost::wave::T_CPPCOMMENT) || Match(boost::wave::T_NEWLINE)) {
-DEBUG_RLPARSER(    
+DEBUG_RLPARSER(
     std::cout<<"PARSER: RlCCat::closed\n";
 );
     rl_ccat = RlCCat::closed;
@@ -149,7 +149,7 @@ DEBUG_RLPARSER(
     }
     else {
       rl_str_formatted += it->get_value().c_str();
-      FillFormattedRL(*it);     
+      FillFormattedRL(*it);
       ++it;//increment to get to the next token
     }
 
@@ -216,7 +216,7 @@ void RlParser::Assignment()
   id_value << it->get_value();
 DEBUG_RLPARSER(
   std::cout << "\nin Assignment: "<<id_value.str();
-);    
+);
   switch(id) {
     //comma has the lowest priority
     case T_COMMA:
@@ -225,18 +225,18 @@ DEBUG_RLPARSER(
       break;
     case T_ASSIGN://=
     case T_ANDASSIGN://&=
-    case T_ANDASSIGN_ALT:// and_eq    
-    case T_DIVIDEASSIGN:// /=  
-    case T_MINUSASSIGN:// -=   
-    case T_STARASSIGN:// *=  
+    case T_ANDASSIGN_ALT:// and_eq
+    case T_DIVIDEASSIGN:// /=
+    case T_MINUSASSIGN:// -=
+    case T_STARASSIGN:// *=
     case T_PERCENTASSIGN:
-    case T_PLUSASSIGN:   
+    case T_PLUSASSIGN:
     case T_ORASSIGN:
-    case T_ORASSIGN_ALT:// or_eq        
-    case T_ORASSIGN_TRIGRAPH:     
+    case T_ORASSIGN_ALT:// or_eq
+    case T_ORASSIGN_TRIGRAPH:
     case T_XOR_TRIGRAPH:
     case T_XORASSIGN:
-    case T_XORASSIGN_ALT: 
+    case T_XORASSIGN_ALT:
     case T_XORASSIGN_TRIGRAPH:
     case T_SHIFTLEFTASSIGN: // <<=
     case T_SHIFTRIGHTASSIGN:// >>=
@@ -256,13 +256,13 @@ void RlParser::Expression()
   Expression1();
   std::stringstream id_value;
   boost::wave::token_id id = boost::wave::token_id(*it);
-  id_value << it->get_value();  
+  id_value << it->get_value();
 DEBUG_RLPARSER(
   std::cout << "\nin Expression: "<<id_value.str();
 );
-  //although the comma has lower priority than the assignment but 
+  //although the comma has lower priority than the assignment but
   //it has been kept here to facilitate simple parsing
-	while(id == T_AND || id == T_XOR || id == T_OR || id == T_ANDAND || 
+	while(id == T_AND || id == T_XOR || id == T_OR || id == T_ANDAND ||
 		id == T_OROR || id == T_OROR_ALT) {
 		Match(id);
 		Expression1();
@@ -278,16 +278,14 @@ void RlParser::Expression1()
   std::stringstream id_value;
   boost::wave::token_id id = boost::wave::token_id(*it);
   id_value << it->get_value();
-DEBUG_RLPARSER(
-  std::cout<<"\nin Expression1: "<<id_value.str();
-);  
-	while(id == T_EQUAL || id == T_NOTEQUAL || id == T_NOTEQUAL_ALT || 
-			id == T_LESS || id == T_LESSEQUAL || id == T_GREATER || 
-			id == T_GREATEREQUAL) {
+  DEBUG_RLPARSER(std::cout<<"\nin Expression1: "<<id_value.str(););
+  while(id == T_EQUAL || id == T_NOTEQUAL || id == T_NOTEQUAL_ALT ||
+        id == T_LESS || id == T_LESSEQUAL || id == T_GREATER ||
+        id == T_GREATEREQUAL) {
     Match(id);
     Expression2();
     id = *it;
-    rl_ttype.relational_operator_type = true;    
+    rl_ttype.relational_operator_type = true;
   }
 }
 
@@ -298,14 +296,12 @@ void RlParser::Expression2()
   std::stringstream id_value;
   boost::wave::token_id id = boost::wave::token_id(*it);
   id_value << it->get_value();
-DEBUG_RLPARSER(          
-  std::cout<<"\nin Expression2: "<<id_value.str();            
-);  
+  DEBUG_RLPARSER(std::cout<<"\nin Expression2: "<<id_value.str(););
   while(id == T_SHIFTLEFT || id == T_SHIFTRIGHT) {
     Match(id);
     Expression3();
     id = *it;
-    rl_ttype.binary_operator_type = true;   
+    rl_ttype.binary_operator_type = true;
   }
 }
 
@@ -316,9 +312,7 @@ void RlParser::Expression3()
   std::stringstream id_value;
   boost::wave::token_id id = boost::wave::token_id(*it);
   id_value << it->get_value();
-DEBUG_RLPARSER(        
-  std::cout<<"\nin Expression3: "<<id_value.str();            
-);  
+  DEBUG_RLPARSER(std::cout<<"\nin Expression3: "<<id_value.str(););
   while(id == T_PLUS || id == T_MINUS) {
     Match(id);
     Expression4();
@@ -334,9 +328,7 @@ void RlParser::Expression4()
   std::stringstream id_value;
   boost::wave::token_id id = boost::wave::token_id(*it);
   id_value << it->get_value();
-DEBUG_RLPARSER(        
-  std::cout<<"\nin Expression4: "<<id_value.str();            
-);  
+  DEBUG_RLPARSER(std::cout<<"\nin Expression4: "<<id_value.str(););
   while(id == T_STAR || id == T_DIVIDE || id == T_PERCENT) {
     Match(id);
     Expression5();
@@ -351,9 +343,7 @@ void RlParser::Expression5()
   Expression6();
   std::stringstream id_value;
   boost::wave::token_id id = boost::wave::token_id(*it);
-DEBUG_RLPARSER(        
-  std::cout<<"\nin Expression5: "<<id_value.str();            
-);  
+  DEBUG_RLPARSER(std::cout<<"\nin Expression5: "<<id_value.str(););
   while(id == T_DOTSTAR || id == T_ARROWSTAR) {
     Match(id);
     Expression6();
@@ -368,9 +358,7 @@ void RlParser::Expression6()
   Expression7();
   std::stringstream id_value;
   boost::wave::token_id id = boost::wave::token_id(*it);
-DEBUG_RLPARSER(        
-  std::cout<<"\nin Expression6: "<<id_value.str();            
-);  
+  DEBUG_RLPARSER(std::cout<<"\nin Expression6: "<<id_value.str(););
   while(id == T_STAR || id == T_DIVIDE || id == T_PERCENT) {
     Match(id);
     Expression7();
@@ -385,10 +373,8 @@ void RlParser::Expression7()
   Expression8();
   std::stringstream id_value;
   boost::wave::token_id id = boost::wave::token_id(*it);
-DEBUG_RLPARSER(        
-  std::cout<<"\nin Expression7: "<<id_value.str();            
-);  
-  if(id == T_POUND_POUND || id == T_POUND_POUND_ALT || 
+  DEBUG_RLPARSER(std::cout<<"\nin Expression7: "<<id_value.str(););
+  if(id == T_POUND_POUND || id == T_POUND_POUND_ALT ||
     id == T_POUND_POUND_TRIGRAPH) {
     rl_ccat = RlCCat::open;
     throw ExceptionHandler(*it, "'##' operator");
@@ -402,16 +388,15 @@ void RlParser::Expression8()
   std::stringstream id_value;
   boost::wave::token_id id = boost::wave::token_id(*it);
   id_value<<it->get_value();
-DEBUG_RLPARSER(        
-  std::cout<<"\nin Expression8: "<<id_value.str()<<"\n";
-);
+  DEBUG_RLPARSER(std::cout<<"\nin Expression8: "<<id_value.str()<<"\n";);
+
   switch(id) {
     case T_POUND:
     case T_POUND_ALT:
     case T_POUND_TRIGRAPH:
       rl_ccat = RlCCat::open;
       throw ExceptionHandler("  - note: '#' operator");
-   //prefix operators  
+   //prefix operators
     case T_MINUS:
     case T_PLUS:
     case T_NOT:
@@ -428,9 +413,8 @@ DEBUG_RLPARSER(
     /// @todo wrong classification for function call(with args) inside
     /// a function like macro
       rl_idlist.insert(*it);
-DEBUG_RLPARSER(            
-      std::cout<<"\nIn Expression8 Expected: "<<id_value.str();
-);
+      DEBUG_RLPARSER(std::cout<<"\nIn Expression8 Expected: "<<id_value.str(););
+
       //identifier might be defined somewhere
       //if parenthesis follows => function
       //if square brackets => subscript
@@ -443,17 +427,16 @@ DEBUG_RLPARSER(
         });
       Match(T_IDENTIFIER);
       rl_ttype.reject_type = IsRejectPredefinedMacro(id_value.str());
-      //this is the id of the next token since Match 
+      //this is the id of the next token since Match
       //fetches the next token after a Match
       id = boost::wave::token_id(*it);
       if(id == T_LEFTBRACKET) {
-        Match(T_LEFTBRACKET);  
+        Match(T_LEFTBRACKET);
         Expression();
-DEBUG_RLPARSER(
-        id_value.str(std::string());          
-        id_value<<it->get_value();    
-        std::cout<<"\nMatching right bracket: "<<id_value.str();
-);          
+        DEBUG_RLPARSER(id_value.str(std::string());
+                       id_value<<it->get_value();
+                       std::cout<<"\nMatching right bracket: "<<id_value.str(););
+
         Match(T_RIGHTBRACKET);
       }
       else if(id == T_PLUSPLUS || id == T_MINUSMINUS) {
@@ -463,11 +446,9 @@ DEBUG_RLPARSER(
       else if(id == T_LEFTPAREN) { //function --kindof simplification
         Match(id);
         Assignment();
-DEBUG_RLPARSER(
-        id_value.str(std::string());
-        id_value<<it->get_value();    
-        std::cout<<"\nMatching right paren of function: "<<id_value.str();
-);                    
+        DEBUG_RLPARSER(id_value.str(std::string());
+                       id_value<<it->get_value();
+                       std::cout<<"\nMatching right paren of function: "<<id_value.str(););
         Match(T_RIGHTPAREN);
         //look if it is followed by parenthesis
         //so that function
@@ -478,15 +459,13 @@ DEBUG_RLPARSER(
     case T_DECIMALINT:
     case T_HEXAINT:
     case T_INTLIT:
-DEBUG_RLPARSER(        
-  std::cout<<"\nExpecting Num literal_type: "<<id_value.str()<<"\n";
-);      
+      DEBUG_RLPARSER(std::cout<<"\nExpecting Num literal_type: "<<id_value.str()<<"\n";);
       Match(id);
       rl_ttype.literal_type = true;
-      break;      
+      break;
     case T_LONGINTLIT:
     case T_FLOATLIT:
-    case T_FIXEDPOINTLIT:  // IDL specific    
+    case T_FIXEDPOINTLIT:  // IDL specific
       Match(id);
       //to bypass <lit>e<+/-><lit><id>
       if(Match(T_IDENTIFIER)) {} // Empty
@@ -496,20 +475,16 @@ DEBUG_RLPARSER(
     case T_STRINGLIT:
       Match(id);
       rl_ttype.literal_type = true;
-      break;    
+      break;
     case T_LEFTPAREN:
-DEBUG_RLPARSER(
-      std::cout<<"\nMatch Left Paren";
-);      
+      DEBUG_RLPARSER(std::cout<<"\nMatch Left Paren";);
       Match(T_LEFTPAREN);
       Expression();
-DEBUG_RLPARSER(      
-      std::cout<<"\nMatch Right Paren";
-);      
+      DEBUG_RLPARSER(std::cout<<"\nMatch Right Paren";);
       Match(T_RIGHTPAREN);
       rl_ttype.paren_type = true;
       break;
-        
+
 //reject keyword_type
     case T_ASM:
     case T_AUTO:
@@ -528,14 +503,14 @@ DEBUG_RLPARSER(
     case T_DO:
     case T_DOUBLE:
     case T_ELSE:
-    case T_ENUM: 
+    case T_ENUM:
     case T_EXPLICIT:
     case T_EXPORT:
     case T_EXTERN:
     case T_FLOAT:
     case T_FOR:
     case T_FRIEND:
-    case T_IF: 
+    case T_IF:
     case T_INLINE:
     case T_INT:
     case T_LONG:
@@ -550,10 +525,10 @@ DEBUG_RLPARSER(
     case T_SIGNED:
     ///@todo left for now  to be looked into later
     ///how to handle macros like #define _size_type_ unsigned int
-    case T_NEW:    
-    case T_DELETE:      
-    case T_DYNAMICCAST:    
-    case T_REINTERPRETCAST:      
+    case T_NEW:
+    case T_DELETE:
+    case T_DYNAMICCAST:
+    case T_REINTERPRETCAST:
     case T_STATICCAST:
     case T_SIZEOF:
       // left paren then expr then right paren
@@ -610,24 +585,22 @@ DEBUG_RLPARSER(
       break;
 //     //array dereference
 //     case T_LEFTBRACKET:
-//     case T_LEFTBRACKET_ALT:       
+//     case T_LEFTBRACKET_ALT:
 //     case T_LEFTBRACKET_TRIGRAPH:
 //       Match(id);
 //       Expression();
 //       Match(T_RIGHTBRACKET);
     //case T_RIGHTBRACKET:
-    //case T_RIGHTBRACKET_ALT:    
+    //case T_RIGHTBRACKET_ALT:
     //case T_RIGHTBRACKET_TRIGRAPH:
 
     //function like only
     case T_LEFTBRACE:
-    case T_LEFTBRACE_ALT: 
+    case T_LEFTBRACE_ALT:
     case T_LEFTBRACE_TRIGRAPH:
       //look for multiple statements within the braces
       //assume that statements are correct within the block
-DEBUG_RLPARSER2(        
-      std::cout<<"\nfound left brace: "<<id_value.str()<<"\n";
-);
+      DEBUG_RLPARSER2(std::cout<<"\nfound left brace: "<<id_value.str()<<"\n";);
       ++brace_count;
       Match(id);
       //continue overlooking symbols until a right brace is found
@@ -635,17 +608,13 @@ DEBUG_RLPARSER2(
       //there are no macros which has only open or only close brace
       do {
         id = *it;
-//std::cout<<"Inside do-while loop curr symbol:"<<it->get_value();        
+        //std::cout<<"Inside do-while loop curr symbol:"<<it->get_value();
         if(id == T_RIGHTBRACE) {//for nested braces
-DEBUG_RLPARSER2(        
-          std::cout<<"\nfound right brace: \n";
-);
+          DEBUG_RLPARSER2(std::cout<<"\nfound right brace: \n";);
           --brace_count;
         }
         if(id == T_LEFTBRACE) {
-DEBUG_RLPARSER2(       
-          std::cout<<"\nfound left brace: \n";
-);          
+          DEBUG_RLPARSER2(std::cout<<"\nfound left brace: \n";);
           ++brace_count;
         }
         if(id == boost::wave::T_NEWLINE)
@@ -656,7 +625,7 @@ DEBUG_RLPARSER2(
       rl_ttype.braces_type = true;
       //set the category
       break;
-    //if there is a right brace without a left brace that 
+    //if there is a right brace without a left brace that
     //meand it is code-snippet a.k.a. partial
     case T_RIGHTBRACE:
     case T_RIGHTBRACE_ALT:
@@ -666,11 +635,11 @@ DEBUG_RLPARSER2(
       break;
       //skip for now
 
-//     case T_POUND_POUND:   
+//     case T_POUND_POUND:
 //     case T_POUND_POUND_ALT:
 //     case T_POUND_POUND_TRIGRAPH:
 //       throw ExceptionHandler("##operator");
-    case T_ELLIPSIS:      
+    case T_ELLIPSIS:
       Match(id);
       Match(T_IDENTIFIER);
       rl_ttype.unknown_type = true;
@@ -682,14 +651,14 @@ DEBUG_RLPARSER2(
       // semicolon marks end of a statement
       rl_ttype.statement_type = true;
       std::cout<<"\nfound semi colon: \n";
-      break;      
+      break;
     case T_DOT:
     case T_ARROW:
     // :: has the highest priority
     case T_COLON_COLON:
-    case T_COLON:  
+    case T_COLON:
     case T_DOTSTAR:
-    case T_ARROWSTAR:      
+    case T_ARROWSTAR:
       Match(id);
       rl_ttype.special_type = true;
       break;
@@ -699,12 +668,12 @@ DEBUG_RLPARSER2(
       Match(T_COLON);
       Expression();
       rl_ttype.ternary_operator_type = true;
-      break; 
+      break;
 
     //set rl_tcat::assignment_type;
-    //skips    
+    //skips
     case T_SPACE:
-    case T_SPACE2:   
+    case T_SPACE2:
     case T_CONTLINE:
       Match(id);
       break;
@@ -714,8 +683,8 @@ DEBUG_RLPARSER2(
       std::cout<<"\ncomments: "<<id_value.str()<<"\n";
 );
       break;
-    //may be error   
-    case T_ANY:  
+    //may be error
+    case T_ANY:
     case T_ANY_TRIGRAPH:
     case T_UNKNOWN:
     case T_FIRST_TOKEN:
@@ -784,23 +753,23 @@ void RlParser::FillFormattedRL(token_type tok)
     case T_LEFTBRACE:
       rl_str_formatted += "\n";
       break;
-    case T_RIGHTBRACE:     
+    case T_RIGHTBRACE:
       rl_str_formatted += "\n";
       break;
     default:
       break;
   }
 //  std::cout<<"FORMATTED REPLACEMENT TEXT:\n";
-//  std::cout<<rl_str_formatted<<"\n";  
+//  std::cout<<rl_str_formatted<<"\n";
 }
 
-/* 
+/*
  * might be useful for analyzing how the parsing is done
  * capture the output from all the functions like "indside expression 1" etc
 void RlParser::print_state_transition()
-{ 
+{
   //std::cout<<replacement_list_str<<"\n";
-  //std::for_each(state_transition.begin(),state_transition.end(),[](int v){//std::cout<<v<<" ";}); 
+  //std::for_each(state_transition.begin(),state_transition.end(),[](int v){//std::cout<<v<<" ";});
   //std::cout<<"\n";
 }
 */

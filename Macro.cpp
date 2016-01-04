@@ -214,6 +214,9 @@ std::string const& PPMacro::get_identifier_str() const
 { return identifier_str; }
 
 
+void PPMacro::dump() const
+{ std::cout << identifier_str; }
+
 std::string PPMacro::get_replacement_list_str() const
 { return rep_list.get_replacement_list_str(); }
 

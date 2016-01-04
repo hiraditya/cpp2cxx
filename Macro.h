@@ -84,7 +84,7 @@ class PPMacro
     void set_replacement_list_category(RlParser & rl_parser);
     void set_conditional_category(CondCategory condCat);
     void set_macro_scope_category(MacroScopeCategory m_scat);
-      //for the object like macro first == last for the use_case
+    //for the object like macro first == last for the use_case
     // keep only the first use case
     // as a complete list of use case is already returned by clang
     void set_use_case(std::pair<token_iterator, token_iterator>& token_iter_range);
@@ -94,6 +94,7 @@ class PPMacro
     std::vector<token_type> const& get_tokens() const;
     int get_num_tokens() const;
     std::string const& get_identifier_str() const;
+    void dump() const;
     std::string get_replacement_list_str() const;
     std::string const& get_formatted_replacement_list_str() const;
     std::string const& get_replacement_list_str_with_comments() const;
@@ -140,8 +141,8 @@ class PPMacro
     MacroStat const* get_macro_stat();
     
     bool operator==(PPMacro const& mac) const;
-      //bool operator==(token_type const& tok) const;
-      //no less than operator should be defined but why??
+    //bool operator==(token_type const& tok) const;
+    //no less than operator should be defined but why??
     bool operator<(PPMacro const& mac) const;
 
   private:  
@@ -154,9 +155,9 @@ class PPMacro
     token_type identifier;
     //the complete macro -- operation + identifier +(args)opt + rep_text
     std::vector<token_type> macro_tokens;
-      //the complete identifier string including arguments
+    //the complete identifier string including arguments
     std::string identifier_str;
-      //keep the function_like PPMacro's arguments and their position 
+    //keep the function_like PPMacro's arguments and their position 
     vpTokInt identifier_parameters;
     PPOperation operation;//define or undefine etc...
     MacroCategory m_cat; //function like or object like etc...

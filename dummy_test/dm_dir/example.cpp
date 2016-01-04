@@ -8,7 +8,7 @@ constexpr auto A = 100;
 
 
 #if defined(__cplusplus) && defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(USE__c_examplecpp_5_9)
-template <class _T1> 
+template <class _T1>
 auto _c(_T1 i) -> decltype(i)
 {
   return i;
@@ -18,7 +18,7 @@ auto _c(_T1 i) -> decltype(i)
 #endif
 
 #if defined(__cplusplus) && defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(USE__a_examplecpp_6_9)
-template <class _T1> 
+template <class _T1>
 auto _a(_T1 i) -> decltype(i*i)
 {
   return i*i;
@@ -30,7 +30,7 @@ auto _a(_T1 i) -> decltype(i*i)
 
 #define CRYPTOPP_X86_ASM_AVAILABLE 
 #if defined(__cplusplus) && defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(USE_FXY_examplecpp_9_9)
-template <class _T1, class _T2, class _T3> 
+template <class _T1, class _T2, class _T3>
 auto FXY(_T1 X, _T2 Y, _T3 Z) -> decltype(((X) + (Y)))
 {
   return ((X) + (Y));
@@ -55,7 +55,7 @@ int super(int i)
 {
 
 #if defined(__cplusplus) && defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(USE_INSIDE_FUN_SUPER_examplecpp_16_9)
-template <class _T1, class _T2> 
+template <class _T1, class _T2>
 auto INSIDE_FUN_SUPER(_T1 X, _T2 Y) -> decltype(X+100 + j)
 {
   return X+100 + j;
@@ -65,7 +65,7 @@ auto INSIDE_FUN_SUPER(_T1 X, _T2 Y) -> decltype(X+100 + j)
 #endif
 
 
-  //variable 'j' referenced in macro INSIDE_FUN_SUPER 
+  //variable 'j' referenced in macro INSIDE_FUN_SUPER
   //the transformation has to be carefully placed after the declaration of 'int j'
   int j = 10;
 
@@ -87,7 +87,7 @@ void proc(_T1 && X, _T2 && Y)
 #endif
 
 #if defined(__cplusplus) && defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(USE_MSB_examplecpp_31_9)
-template <class _T1> 
+template <class _T1>
 auto MSB(_T1 x) -> decltype((((x) >> 24) & 0xffU)  /* most  significant byte */)
 {
   return (((x) >> 24) & 0xffU)  /* most  significant byte */;
@@ -108,7 +108,7 @@ int main()
 
 
 #if defined(__cplusplus) && defined(__GXX_EXPERIMENTAL_CXX0X__) && defined(USE_INSIDE_FUN_examplecpp_42_9)
-template <class _T1> 
+template <class _T1>
 auto INSIDE_FUN(_T1 X) -> decltype(X+100)
 {
   return X+100;
