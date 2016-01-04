@@ -45,7 +45,7 @@ namespace clang{
         SourceRange Range);//, MacroArgs* Args); in old version of 3.1
 
     /// PPCallback
-    void MacroDefined(const Token &MacroNameTok, const MacroInfo* MI);
+    void MacroDefined(const Token &MacroNameTok, const MacroDirective *MD);
 
     /// PPCallback
     bool FileNotFound(StringRef FileName, SmallVectorImpl<char>& RecoveryPath);

@@ -1,24 +1,24 @@
-cmake_minimum_required(VERSION 2.8)
-project(ASTConsumer)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(ASTConsumer)
 
-include_directories("${CMAKE_SOURCE_DIR}")
+INCLUDE_DIRECTORIES("${CMAKE_SOURCE_DIR}")
 
-add_definitions(-D__STDC_CONSTANT_MACROS)
-add_definitions(-D__STDC_FORMAT_MACROS)
-add_definitions(-D__STDC_LIMIT_MACROS)
+ADD_DEFINITIONS(-D__STDC_CONSTANT_MACROS)
+ADD_DEFINITIONS(-D__STDC_FORMAT_MACROS)
+ADD_DEFINITIONS(-D__STDC_LIMIT_MACROS)
 ADD_DEFINITIONS(-D_GNU_SOURCE)
-#add_definitions(-DCLANG_AST_DEBUG)
+ADD_DEFINITIONS(-DCLANG_AST_DEBUG_PRINT)
 
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}  "-std=c++11 -fno-rtti -g -Wno-non-virtual-dtor")
+SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}  "-std=c++11 -fno-rtti -g -Wno-non-virtual-dtor")
 
-link_directories("${CFE_PREFIX_PATH}/lib")
+LINK_DIRECTORIES("${CFE_PREFIX_PATH}/lib")
 
-add_library(ASTConsumer SHARED
+ADD_LIBRARY(ASTConsumer SHARED
     TrackMacro.cpp
     ASTConsumer.cpp
   )
 
-target_link_libraries(ASTConsumer
+TARGET_LINK_LIBRARIES(ASTConsumer
   # Output of llvm-config.
 LLVMLTO LLVMObjCARCOpts LLVMLinker LLVMBitWriter LLVMIRReader LLVMMIRParser LLVMAsmParser LLVMLibDriver
 LLVMOption LLVMDebugInfoPDB LLVMTableGen LLVMOrcJIT LLVMPasses LLVMipo LLVMVectorize LLVMX86Disassembler

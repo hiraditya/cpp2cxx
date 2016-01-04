@@ -63,8 +63,9 @@ void TrackMacro::MacroExpands(const Token &MacroNameTok, const MacroInfo* MI,
 }
 
 /// PPCallback
-void TrackMacro::MacroDefined(const Token &MacroNameTok, const MacroInfo* MI)
+void TrackMacro::MacroDefined(const Token &MacroNameTok, const MacroDirective *MD)
 {
+  const MacroInfo* MI = MD->getMacroInfo();
   //if(MacroIsLocal(MI->getDefinitionLoc())) {
   CollectedMacroInfo cmi;
   if(sm->isInMainFile(MI->getDefinitionLoc())) {
@@ -174,7 +175,7 @@ void TrackMacro::VerifyMacroScopeFast(std::map<std::string, ParsedDeclInfo>const
   /// collect all the start line numbers of function, and sort them
   for( ; fi_iter != FunctionInfo.end(); ++fi_iter) {
     CLANG_AST_DEBUG(dbgs() << "Function: " << fi_iter->first
-                           << "definition range is: ("
+                           << ", definition range is: ("
                            <<(fi_iter->second).start_line << ","
                            << (fi_iter->second).end_line << ")\n";);
     FunctionDefinitionRange[(fi_iter->second).start_line] = start;
@@ -192,7 +193,7 @@ void TrackMacro::VerifyMacroScopeFast(std::map<std::string, ParsedDeclInfo>const
     // because of an extra entry
 
     CLANG_AST_DEBUG(dbgs() << "For macro: " << ms->first
-                           << "Defined line is: " << (ms->second).defined_line
+                           << ", defined line is: " << (ms->second).defined_line
                            << ", the range returned is: ("
                            << fdr_iter->first << ","
                            << fdr_iter->second << ")\n";);
@@ -200,7 +201,7 @@ void TrackMacro::VerifyMacroScopeFast(std::map<std::string, ParsedDeclInfo>const
     if(fdr_iter->second == end) {
         (ms->second).s_cat.inside_function = true;
       CLANG_AST_DEBUG(dbgs() << "Macro: " << ms->first
-                             << " is inside function\n";);
+                             << ", is inside function\n";);
     }
   }
 }
@@ -217,7 +218,7 @@ VerifyMacroScope(std::map<std::string, ParsedDeclInfo>const & FunctionInfo)
         && (ms->second).defined_line < (fi->second).end_line) {
         (ms->second).s_cat.inside_function = true;
         CLANG_AST_DEBUG(dbgs() << "Macro: " << ms->first
-                               << " is inside function " << fi->first << "\n";);
+                               << ", is inside function " << fi->first << "\n";);
       }
     }
   }

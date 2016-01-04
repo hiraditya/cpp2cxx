@@ -40,7 +40,8 @@ Demacrofier::Demacrofier()
    count(0)
 { }
 
-std::string Demacrofier::Translate(PPMacro const* m_ptr, std::ostream& stat, bool cleanup, bool demacrofy)
+std::string Demacrofier::Translate(PPMacro const* m_ptr, std::ostream& stat,
+                                   bool cleanup, bool demacrofy)
 {
   bool postponed = false;
   std::string demacrofied_str;
@@ -83,13 +84,16 @@ std::string Demacrofier::Translate(PPMacro const* m_ptr, std::ostream& stat, boo
     return original_str;
   }//endif RlCCat and RlDCat test
 
-  //should be after the previous if stmt as the previous one tests for boolean demacrofy
+  //should be after the previous if stmt,
+  // as the previous one tests for boolean demacrofy.
   if(cleanup){
-    outstr = GenerateTranslation(macro_iden.str(), unique_macro_switch, demacrofied_fstream.str());
+    outstr = GenerateTranslation(macro_iden.str(), unique_macro_switch,
+                                 demacrofied_fstream.str());
     stat << "  - id:" << macro_iden.str() << "\n";
   }
   else{
-    outstr = SuggestTranslation(unique_macro_switch, demacrofied_fstream.str(), original_str);
+    outstr = SuggestTranslation(unique_macro_switch, demacrofied_fstream.str(),
+                                original_str);
 
     /**
     macro<count>:
@@ -205,7 +209,7 @@ std::string Demacrofier::DemacrofyStatementType(PPMacro const* m_ptr) const
               << " && "  //space
               << p_it->first.get_value();
     }
-//std::cout<<"the dummy value is "<< (*p_it).first.get_value()<<std::endl;
+
     //for the 2nd till the last argument in the function like macro
     while(++p_it != m_ptr->get_identifier_parameters().end()) {
       //  parameter_count++;
@@ -229,7 +233,7 @@ std::string Demacrofier::DemacrofyStatementType(PPMacro const* m_ptr) const
                    << "(" << arg_str.str()<< ")\n{\n"
                    << m_ptr->get_formatted_replacement_list_str()
           //semicolon has been added because many use cases
-          //do not have semicolon. for the ones which have it doesn't hurt
+          //do not have semicolon. for the ones which have it doesn't hurt.
                    << ";\n}\n";
 
 return demacrofied_line.str();
@@ -564,7 +568,7 @@ bool Demacrofier::CollectDemacrofiedString(PPMacro const* m_ptr, std::string& de
       demacrofied_str = DemacrofyFunctionLikePostponed(m_ptr);
       postponed = true;
 
-      DEBUG_SUGGESTION(dbgs() << "\nThis macro is inside function"
+      DEBUG_SUGGESTION(dbgs() << "\nThis macro is inside function:\n"
                               << demacrofied_str;);
     }
     else demacrofied_str = DemacrofyFunctionLike(m_ptr);
@@ -579,6 +583,8 @@ bool Demacrofier::CollectDemacrofiedString(PPMacro const* m_ptr, std::string& de
     }
     else demacrofied_str = DemacrofyObjectLike(m_ptr);
   }
-  DEBUG_SUGGESTION(if(postponed) dbgs() << "\npostponed for this macro";);
+
+  DEBUG_SUGGESTION(if(postponed)
+                     dbgs() << "\nTranslation postponed for this macro";);
   return postponed;
 }
