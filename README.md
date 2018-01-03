@@ -13,6 +13,12 @@ INSTALL.pdf
 
 https://github.com/hiraditya/cpp2cxx/blob/master/INSTALL.pdf
 
+
+-------------------------------------------------------------------------------------------------------------
+
+Builds with 
+**llvm/clang-3.8**
+
 -------------------------------------------------------------------------------------------------------------
 
 Paper explaining the concepts of demacrofication:
